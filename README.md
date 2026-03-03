@@ -11,7 +11,7 @@ Conjugate Gradient method.
 | Branch | Description | Status |
 |--------|-------------|--------|
 | `v0-baseline` | Classical FDM + CG solvers, metrics, experiments (no ML) | Complete |
-| `v1-cnn-warmstart` | CNN/U-Net predicts initial guess for CG | Planned |
+| `v1-cnn-warmstart` | CNN/U-Net predicts initial guess for CG | In Progress |
 | `v2-mdpnop-warmstart` | MD-PNOP neural operator warm-start | Planned |
 | `v3-npo-preconditioner` | NPO learned preconditioner for CG | Planned |
 
