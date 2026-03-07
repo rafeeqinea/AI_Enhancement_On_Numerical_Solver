@@ -1,7 +1,6 @@
 # AI Enhancement of Numerical Solvers
 
 **M34 Final Year Project — University of Greenwich**
-**Researcher:** Rafeeq | **Supervisor:** Dr Peter Soar
 
 ---
 
