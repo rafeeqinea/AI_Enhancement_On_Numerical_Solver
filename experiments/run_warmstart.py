@@ -1,0 +1,139 @@
+from __future__ import annotations
+
+import json
+import os
+import sys
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+
+import torch
+
+from src.models.cnn import BaselineCNN
+from src.models.unet import UNet
+from src.training.train import train
+from src.evaluation.evaluate import evaluate_warmstart
+from src.utils.visualize import plot_scaling, plot_comparison_bar
+
+
+RESULTS_DIR = os.path.join(os.path.dirname(__file__), '..', 'results', 'warmstart')
+DATA_DIRS = [
+    'data/processed/N16_1000samples_seed42',
+    'data/processed/N32_1000samples_seed42',
+    'data/processed/N64_1000samples_seed42',
+]
+EVAL_SIZES = [16, 32, 64]
+EVAL_SAMPLES = 50
+TOL = 1e-6
+
+
+def train_model(model: torch.nn.Module, name: str, epochs: int = 100) -> dict:
+    save_dir = os.path.join(RESULTS_DIR, f'{name}_checkpoints')
+    result = train(
+        model,
+        data_dirs=DATA_DIRS,
+        epochs=epochs,
+        batch_size=32,
+        lr=1e-3,
+        patience=15,
+        save_dir=save_dir,
+    )
+    print(f'\n{name} training: {result["epochs_trained"]} epochs, '
+          f'best val loss = {result["best_val_loss"]:.6f}, '
+          f'time = {result["training_time_seconds"]:.1f}s')
+    return result
+
+
+def evaluate_model(model: torch.nn.Module, name: str) -> list[dict]:
+    device = next(model.parameters()).device
+    results = []
+    for N in EVAL_SIZES:
+        print(f'  Evaluating {name} on N={N}...', end=' ', flush=True)
+        r = evaluate_warmstart(model, N, num_samples=EVAL_SAMPLES, tol=TOL, device=device)
+        print(f'cold={r["cold_iters_mean"]:.0f}, warm={r["warm_iters_mean"]:.0f}, '
+              f'reduction={r["iteration_reduction"]:.1%}')
+        results.append(r)
+    return results
+
+
+def run_experiment() -> dict:
+    os.makedirs(RESULTS_DIR, exist_ok=True)
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    print(f'Device: {device}')
+    print('=' * 60)
+
+    print('\n--- Training BaselineCNN ---')
+    cnn = BaselineCNN(hidden_channels=32, num_layers=7)
+    cnn_train = train_model(cnn, 'cnn')
+    cnn.load_state_dict(torch.load(
+        os.path.join(RESULTS_DIR, 'cnn_checkpoints', 'best_model.pt'),
+        map_location=device, weights_only=True,
+    ))
+    cnn.to(device)
+
+    print('\n--- Training UNet ---')
+    unet = UNet(base_features=32, levels=4)
+    unet_train = train_model(unet, 'unet')
+    unet.load_state_dict(torch.load(
+        os.path.join(RESULTS_DIR, 'unet_checkpoints', 'best_model.pt'),
+        map_location=device, weights_only=True,
+    ))
+    unet.to(device)
+
+    print('\n--- Evaluating CNN warm-start ---')
+    cnn_eval = evaluate_model(cnn, 'CNN')
+
+    print('\n--- Evaluating UNet warm-start ---')
+    unet_eval = evaluate_model(unet, 'UNet')
+
+    cnn_params = sum(p.numel() for p in cnn.parameters())
+    unet_params = sum(p.numel() for p in unet.parameters())
+
+    cold_iters = [r['cold_iters_mean'] for r in cnn_eval]
+    cnn_iters = [r['warm_iters_mean'] for r in cnn_eval]
+    unet_iters = [r['warm_iters_mean'] for r in unet_eval]
+
+    plot_scaling(
+        EVAL_SIZES, [int(round(c)) for c in cold_iters],
+        title='Cold CG Iterations',
+        save_path=os.path.join(RESULTS_DIR, 'cold_scaling.png'),
+    )
+
+    for label, iters in [('CNN', cnn_iters), ('UNet', unet_iters)]:
+        plot_scaling(
+            EVAL_SIZES, [int(round(i)) for i in iters],
+            title=f'{label} Warm-Start Iterations',
+            save_path=os.path.join(RESULTS_DIR, f'{label.lower()}_warmstart_scaling.png'),
+        )
+
+    for i, N in enumerate(EVAL_SIZES):
+        plot_comparison_bar(
+            ['Cold CG', 'CNN Warm', 'UNet Warm'],
+            [cold_iters[i], cnn_iters[i], unet_iters[i]],
+            title=f'Iterations Comparison (N={N})',
+            save_path=os.path.join(RESULTS_DIR, f'comparison_N{N}.png'),
+        )
+
+    summary = {
+        'models': {
+            'cnn': {'params': cnn_params, 'training': cnn_train},
+            'unet': {'params': unet_params, 'training': unet_train},
+        },
+        'evaluation': {
+            'cnn': cnn_eval,
+            'unet': unet_eval,
+        },
+    }
+
+    with open(os.path.join(RESULTS_DIR, 'results.json'), 'w') as f:
+        json.dump(summary, f, indent=2)
+
+    print('\n' + '=' * 60)
+    print(f'CNN params: {cnn_params:,}')
+    print(f'UNet params: {unet_params:,}')
+    print(f'\nResults saved to {RESULTS_DIR}/')
+
+    return summary
+
+
+if __name__ == '__main__':
+    run_experiment()
