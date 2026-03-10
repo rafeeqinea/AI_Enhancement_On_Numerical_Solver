@@ -6,10 +6,12 @@ import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
+import numpy as np
 import torch
 
 from src.models.cnn import BaselineCNN
 from src.models.unet import UNet
+from src.data.dataset import PoissonDataset
 from src.training.train import train
 from src.evaluation.evaluate import evaluate_warmstart
 from src.utils.visualize import plot_scaling, plot_comparison_bar
@@ -17,16 +19,16 @@ from src.utils.visualize import plot_scaling, plot_comparison_bar
 
 RESULTS_DIR = os.path.join(os.path.dirname(__file__), '..', 'results', 'warmstart')
 DATA_DIRS = [
-    'data/processed/N16_1000samples_seed42',
-    'data/processed/N32_1000samples_seed42',
-    'data/processed/N64_1000samples_seed42',
+    'data/processed/N16_3000samples_seed42',
+    'data/processed/N32_3000samples_seed42',
+    'data/processed/N64_3000samples_seed42',
 ]
 EVAL_SIZES = [16, 32, 64]
 EVAL_SAMPLES = 50
 TOL = 1e-6
 
 
-def train_model(model: torch.nn.Module, name: str, epochs: int = 100) -> dict:
+def train_model(model: torch.nn.Module, name: str, epochs: int = 30) -> dict:
     save_dir = os.path.join(RESULTS_DIR, f'{name}_checkpoints')
     result = train(
         model,
@@ -43,12 +45,28 @@ def train_model(model: torch.nn.Module, name: str, epochs: int = 100) -> dict:
     return result
 
 
-def evaluate_model(model: torch.nn.Module, name: str) -> list[dict]:
+def get_norm_stats_per_n(data_dirs: list[str]) -> dict[int, dict]:
+    stats: dict[int, dict] = {}
+    for d in data_dirs:
+        ds = PoissonDataset(d, normalise=True)
+        stats[ds.N] = {
+            'source_mean': ds.source_mean,
+            'source_std': ds.source_std,
+            'sol_mean': ds.sol_mean,
+            'sol_std': ds.sol_std,
+        }
+    return stats
+
+
+def evaluate_model(model: torch.nn.Module, name: str,
+                   norm_stats_per_n: dict[int, dict]) -> list[dict]:
     device = next(model.parameters()).device
     results = []
     for N in EVAL_SIZES:
+        ns = norm_stats_per_n.get(N)
         print(f'  Evaluating {name} on N={N}...', end=' ', flush=True)
-        r = evaluate_warmstart(model, N, num_samples=EVAL_SAMPLES, tol=TOL, device=device)
+        r = evaluate_warmstart(model, N, norm_stats=ns,
+                               num_samples=EVAL_SAMPLES, tol=TOL, device=device)
         print(f'cold={r["cold_iters_mean"]:.0f}, warm={r["warm_iters_mean"]:.0f}, '
               f'reduction={r["iteration_reduction"]:.1%}')
         results.append(r)
@@ -71,7 +89,7 @@ def run_experiment() -> dict:
     cnn.to(device)
 
     print('\n--- Training UNet ---')
-    unet = UNet(base_features=32, levels=4)
+    unet = UNet(base_features=32, levels=3)
     unet_train = train_model(unet, 'unet')
     unet.load_state_dict(torch.load(
         os.path.join(RESULTS_DIR, 'unet_checkpoints', 'best_model.pt'),
@@ -79,11 +97,17 @@ def run_experiment() -> dict:
     ))
     unet.to(device)
 
+    print('\n--- Computing normalisation stats per N ---')
+    norm_stats_per_n = get_norm_stats_per_n(DATA_DIRS)
+    for N, ns in sorted(norm_stats_per_n.items()):
+        print(f'  N={N}: source(mean={ns["source_mean"]:.4f}, std={ns["source_std"]:.4f}), '
+              f'sol(mean={ns["sol_mean"]:.4f}, std={ns["sol_std"]:.4f})')
+
     print('\n--- Evaluating CNN warm-start ---')
-    cnn_eval = evaluate_model(cnn, 'CNN')
+    cnn_eval = evaluate_model(cnn, 'CNN', norm_stats_per_n)
 
     print('\n--- Evaluating UNet warm-start ---')
-    unet_eval = evaluate_model(unet, 'UNet')
+    unet_eval = evaluate_model(unet, 'UNet', norm_stats_per_n)
 
     cnn_params = sum(p.numel() for p in cnn.parameters())
     unet_params = sum(p.numel() for p in unet.parameters())

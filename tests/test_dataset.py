@@ -36,11 +36,19 @@ class TestPoissonDataset:
         assert torch.all(x[0, :, -1] == 0)
 
     def test_interior_matches_source(self, dataset_dir):
-        ds = PoissonDataset(dataset_dir)
+        ds = PoissonDataset(dataset_dir, normalise=False)
         x, _ = ds[0]
         raw_source = np.load(dataset_dir + '/sources.npy')[0]
         interior = x[0, 1:-1, 1:-1].numpy()
         assert np.allclose(interior, raw_source, atol=1e-6)
+
+    def test_normalisation(self, dataset_dir):
+        ds = PoissonDataset(dataset_dir, normalise=True)
+        x, y = ds[0]
+        raw_source = np.load(dataset_dir + '/sources.npy')[0]
+        expected = (raw_source - ds.source_mean) / ds.source_std
+        interior = x[0, 1:-1, 1:-1].numpy()
+        assert np.allclose(interior, expected, atol=1e-6)
 
     def test_dtype_float32(self, dataset_dir):
         ds = PoissonDataset(dataset_dir)
