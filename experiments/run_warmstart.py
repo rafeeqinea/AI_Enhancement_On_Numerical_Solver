@@ -28,7 +28,7 @@ EVAL_SAMPLES = 50
 TOL = 1e-6
 
 
-def train_model(model: torch.nn.Module, name: str, epochs: int = 1000,
+def train_model(model: torch.nn.Module, name: str, epochs: int = 5000,
                 weight_decay: float = 1e-4) -> dict:
     save_dir = os.path.join(RESULTS_DIR, f'{name}_checkpoints')
     result = train(
@@ -38,7 +38,7 @@ def train_model(model: torch.nn.Module, name: str, epochs: int = 1000,
         batch_size=32,
         lr=1e-3,
         weight_decay=weight_decay,
-        patience=50,
+        patience=100,
         save_dir=save_dir,
     )
     print(f'\n{name} training: {result["epochs_trained"]} epochs, '

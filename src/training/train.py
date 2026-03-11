@@ -139,10 +139,13 @@ def train(
         else:
             epochs_no_improve += 1
 
-        if (epoch + 1) % 10 == 0 or epoch == 0:
-            print(f'Epoch {epoch+1:>4d}/{epochs}  '
+        elapsed_so_far = time.perf_counter() - start
+        if (epoch + 1) % 25 == 0 or epoch == 0:
+            gap = val_loss / max(train_loss, 1e-12)
+            print(f'[{elapsed_so_far:6.0f}s] Epoch {epoch+1:>4d}/{epochs}  '
                   f'train={train_loss:.6f}  val={val_loss:.6f}  '
-                  f'lr={current_lr:.2e}  patience={patience - epochs_no_improve}')
+                  f'gap={gap:.1f}x  lr={current_lr:.2e}  '
+                  f'best={best_val_loss:.6f}  wait={epochs_no_improve}/{patience}')
 
         if epochs_no_improve >= patience:
             print(f'Early stopping at epoch {epoch+1}')
