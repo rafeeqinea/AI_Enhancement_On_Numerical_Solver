@@ -28,7 +28,8 @@ EVAL_SAMPLES = 50
 TOL = 1e-6
 
 
-def train_model(model: torch.nn.Module, name: str, epochs: int = 30) -> dict:
+def train_model(model: torch.nn.Module, name: str, epochs: int = 1000,
+                weight_decay: float = 1e-4) -> dict:
     save_dir = os.path.join(RESULTS_DIR, f'{name}_checkpoints')
     result = train(
         model,
@@ -36,7 +37,8 @@ def train_model(model: torch.nn.Module, name: str, epochs: int = 30) -> dict:
         epochs=epochs,
         batch_size=32,
         lr=1e-3,
-        patience=15,
+        weight_decay=weight_decay,
+        patience=50,
         save_dir=save_dir,
     )
     print(f'\n{name} training: {result["epochs_trained"]} epochs, '
@@ -89,7 +91,7 @@ def run_experiment() -> dict:
     cnn.to(device)
 
     print('\n--- Training UNet ---')
-    unet = UNet(base_features=32, levels=3)
+    unet = UNet(base_features=16, levels=2)
     unet_train = train_model(unet, 'unet')
     unet.load_state_dict(torch.load(
         os.path.join(RESULTS_DIR, 'unet_checkpoints', 'best_model.pt'),

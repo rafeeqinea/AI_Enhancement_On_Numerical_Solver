@@ -95,6 +95,7 @@ def train(
     epochs: int = 100,
     batch_size: int = 32,
     lr: float = 1e-3,
+    weight_decay: float = 0.0,
     patience: int = 15,
     save_dir: str | Path = 'results/checkpoints',
     device: torch.device | None = None,
@@ -103,7 +104,7 @@ def train(
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     model = model.to(device)
-    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
         optimizer, mode='min', factor=0.5, patience=5,
     )
