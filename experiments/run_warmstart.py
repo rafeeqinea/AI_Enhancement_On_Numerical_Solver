@@ -32,7 +32,13 @@ TOL = 1e-6
 
 
 def train_model(model: torch.nn.Module, name: str, epochs: int = 5000,
-                weight_decay: float = 1e-4, save_snapshots: bool = False) -> dict:
+                weight_decay: float = 1e-4, save_snapshots: bool = False) -> dict | None:
+    ckpt_path = os.path.join(RESULTS_DIR, f'{name}_checkpoints', 'best_model.pt')
+    if os.path.exists(ckpt_path) and '--retrain' not in sys.argv:
+        print(f'  Found existing checkpoint at {ckpt_path}, skipping training.')
+        print(f'  (use --retrain to force retraining)')
+        return None
+
     save_dir = os.path.join(RESULTS_DIR, f'{name}_checkpoints')
     result = train(
         model,
@@ -80,29 +86,27 @@ def evaluate_model(model: torch.nn.Module, name: str,
     return results
 
 
+def load_model(model: torch.nn.Module, name: str, device: torch.device) -> None:
+    ckpt_path = os.path.join(RESULTS_DIR, f'{name}_checkpoints', 'best_model.pt')
+    model.load_state_dict(torch.load(ckpt_path, map_location=device, weights_only=True))
+    model.to(device)
+
+
 def run_experiment() -> dict:
     os.makedirs(RESULTS_DIR, exist_ok=True)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f'Device: {device}')
     print('=' * 60)
 
-    print('\n--- Training BaselineCNN ---')
+    print('\n--- BaselineCNN ---')
     cnn = BaselineCNN(hidden_channels=32, num_layers=7)
     cnn_train = train_model(cnn, 'cnn')
-    cnn.load_state_dict(torch.load(
-        os.path.join(RESULTS_DIR, 'cnn_checkpoints', 'best_model.pt'),
-        map_location=device, weights_only=True,
-    ))
-    cnn.to(device)
+    load_model(cnn, 'cnn', device)
 
-    print('\n--- Training UNet ---')
+    print('\n--- UNet ---')
     unet = UNet(base_features=16, levels=2)
     unet_train = train_model(unet, 'unet', save_snapshots=True)
-    unet.load_state_dict(torch.load(
-        os.path.join(RESULTS_DIR, 'unet_checkpoints', 'best_model.pt'),
-        map_location=device, weights_only=True,
-    ))
-    unet.to(device)
+    load_model(unet, 'unet', device)
 
     print('\n--- Computing normalisation stats per N ---')
     norm_stats_per_n = get_norm_stats_per_n(DATA_DIRS)
