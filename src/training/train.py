@@ -89,6 +89,26 @@ def validate(
     return total_loss / total_samples
 
 
+def _save_snapshot(
+    model: nn.Module,
+    val_loaders: list[DataLoader],
+    epoch: int,
+    snapshot_dir: Path,
+    device: torch.device,
+) -> None:
+    model.eval()
+    with torch.no_grad():
+        x_batch, y_batch = next(iter(val_loaders[0]))
+        x_sample = x_batch[0:1].to(device)
+        y_sample = y_batch[0].cpu().numpy().squeeze()
+        pred = model(x_sample).cpu().numpy().squeeze()
+        source = x_sample.cpu().numpy().squeeze()
+    np.savez(
+        snapshot_dir / f'epoch_{epoch:04d}.npz',
+        source=source, truth=y_sample, prediction=pred,
+    )
+
+
 def train(
     model: nn.Module,
     data_dirs: list[str | Path],
@@ -99,6 +119,8 @@ def train(
     patience: int = 15,
     save_dir: str | Path = 'results/checkpoints',
     device: torch.device | None = None,
+    save_snapshots: bool = False,
+    snapshot_every: int = 5,
 ) -> dict[str, Any]:
     if device is None:
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -114,6 +136,10 @@ def train(
 
     save_dir = Path(save_dir)
     save_dir.mkdir(parents=True, exist_ok=True)
+
+    snapshot_dir = save_dir / 'snapshots' if save_snapshots else None
+    if snapshot_dir is not None:
+        snapshot_dir.mkdir(parents=True, exist_ok=True)
 
     history: dict[str, list[float]] = {'train_loss': [], 'val_loss': [], 'lr': []}
     best_val_loss = float('inf')
@@ -138,6 +164,9 @@ def train(
             torch.save(model.state_dict(), save_dir / 'best_model.pt')
         else:
             epochs_no_improve += 1
+
+        if snapshot_dir is not None and (epoch + 1) % snapshot_every == 0:
+            _save_snapshot(model, val_loaders, epoch + 1, snapshot_dir, device)
 
         elapsed_so_far = time.perf_counter() - start
         if (epoch + 1) % 25 == 0 or epoch == 0:

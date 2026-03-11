@@ -14,7 +14,10 @@ from src.models.unet import UNet
 from src.data.dataset import PoissonDataset
 from src.training.train import train
 from src.evaluation.evaluate import evaluate_warmstart
-from src.utils.visualize import plot_scaling, plot_comparison_bar
+from src.utils.visualize import (
+    plot_scaling, plot_comparison_bar,
+    animate_training_curve, animate_predictions,
+)
 
 
 RESULTS_DIR = os.path.join(os.path.dirname(__file__), '..', 'results', 'warmstart')
@@ -29,7 +32,7 @@ TOL = 1e-6
 
 
 def train_model(model: torch.nn.Module, name: str, epochs: int = 5000,
-                weight_decay: float = 1e-4) -> dict:
+                weight_decay: float = 1e-4, save_snapshots: bool = False) -> dict:
     save_dir = os.path.join(RESULTS_DIR, f'{name}_checkpoints')
     result = train(
         model,
@@ -40,6 +43,8 @@ def train_model(model: torch.nn.Module, name: str, epochs: int = 5000,
         weight_decay=weight_decay,
         patience=100,
         save_dir=save_dir,
+        save_snapshots=save_snapshots,
+        snapshot_every=5,
     )
     print(f'\n{name} training: {result["epochs_trained"]} epochs, '
           f'best val loss = {result["best_val_loss"]:.6f}, '
@@ -92,7 +97,7 @@ def run_experiment() -> dict:
 
     print('\n--- Training UNet ---')
     unet = UNet(base_features=16, levels=2)
-    unet_train = train_model(unet, 'unet')
+    unet_train = train_model(unet, 'unet', save_snapshots=True)
     unet.load_state_dict(torch.load(
         os.path.join(RESULTS_DIR, 'unet_checkpoints', 'best_model.pt'),
         map_location=device, weights_only=True,
@@ -152,6 +157,24 @@ def run_experiment() -> dict:
 
     with open(os.path.join(RESULTS_DIR, 'results.json'), 'w') as f:
         json.dump(summary, f, indent=2)
+
+    print('\n--- Generating training animations ---')
+    for name in ['cnn', 'unet']:
+        log_path = os.path.join(RESULTS_DIR, f'{name}_checkpoints', 'training_log.json')
+        if os.path.exists(log_path):
+            animate_training_curve(
+                log_path,
+                os.path.join(RESULTS_DIR, f'{name}_training.mp4'),
+                title=f'{name.upper()} Training Progress',
+            )
+
+    snap_dir = os.path.join(RESULTS_DIR, 'unet_checkpoints', 'snapshots')
+    if os.path.isdir(snap_dir):
+        animate_predictions(
+            snap_dir,
+            os.path.join(RESULTS_DIR, 'unet_prediction_evolution.mp4'),
+            title='UNet Prediction Evolution',
+        )
 
     print('\n' + '=' * 60)
     print(f'CNN params: {cnn_params:,}')
