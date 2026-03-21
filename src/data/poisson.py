@@ -21,11 +21,89 @@ def get_grid_points(N):
     return np.meshgrid(x, y)
 
 
+def assemble_variable_poisson_2d(N: int, D: np.ndarray) -> sp.csr_matrix:
+    h = 1.0 / (N + 1)
+    n = N * N
+
+    D_padded = np.zeros((N + 2, N + 2))
+    D_padded[1:-1, 1:-1] = D.reshape(N, N)
+    D_padded[0, :] = D_padded[1, :]
+    D_padded[-1, :] = D_padded[-2, :]
+    D_padded[:, 0] = D_padded[:, 1]
+    D_padded[:, -1] = D_padded[:, -2]
+
+    rows, cols, vals = [], [], []
+
+    for j in range(N):
+        for i in range(N):
+            idx = j * N + i
+            ip, jp = i + 1, j + 1
+
+            d_e = 0.5 * (D_padded[jp, ip] + D_padded[jp, ip + 1])
+            d_w = 0.5 * (D_padded[jp, ip] + D_padded[jp, ip - 1])
+            d_n = 0.5 * (D_padded[jp, ip] + D_padded[jp + 1, ip])
+            d_s = 0.5 * (D_padded[jp, ip] + D_padded[jp - 1, ip])
+
+            diag = (d_e + d_w + d_n + d_s) / (h * h)
+            rows.append(idx)
+            cols.append(idx)
+            vals.append(diag)
+
+            if i > 0:
+                rows.append(idx)
+                cols.append(idx - 1)
+                vals.append(-d_w / (h * h))
+            if i < N - 1:
+                rows.append(idx)
+                cols.append(idx + 1)
+                vals.append(-d_e / (h * h))
+            if j > 0:
+                rows.append(idx)
+                cols.append(idx - N)
+                vals.append(-d_s / (h * h))
+            if j < N - 1:
+                rows.append(idx)
+                cols.append(idx + N)
+                vals.append(-d_n / (h * h))
+
+    return sp.csr_matrix((vals, (rows, cols)), shape=(n, n))
+
+
+def generate_diffusion_coefficient(X: np.ndarray, Y: np.ndarray, rng: np.random.Generator,
+                                   pattern: str = 'smooth') -> np.ndarray:
+    if pattern == 'smooth':
+        cx, cy = rng.uniform(0.2, 0.8, 2)
+        sigma = rng.uniform(0.15, 0.4)
+        base = 1.0 + 4.0 * np.exp(-((X - cx)**2 + (Y - cy)**2) / (2 * sigma**2))
+        return base
+
+    elif pattern == 'discontinuous':
+        D = np.ones_like(X)
+        cx, cy = rng.uniform(0.3, 0.7, 2)
+        r = rng.uniform(0.1, 0.3)
+        mask = (X - cx)**2 + (Y - cy)**2 < r**2
+        D[mask] = rng.uniform(10.0, 100.0)
+        return D
+
+    elif pattern == 'layered':
+        n_layers = rng.integers(2, 5)
+        boundaries = np.sort(rng.uniform(0.1, 0.9, n_layers - 1))
+        D = np.ones_like(X)
+        for k in range(n_layers):
+            lo = boundaries[k - 1] if k > 0 else 0.0
+            hi = boundaries[k] if k < n_layers - 1 else 1.0
+            mask = (X >= lo) & (X < hi)
+            D[mask] = rng.uniform(0.1, 10.0)
+        return D
+
+    else:
+        return np.ones_like(X)
+
+
 def validate_matrix(A, N):
     n = N * N
     assert A.shape == (n, n)
     diff = A - A.T
     assert diff.nnz == 0 or abs(diff).max() < 1e-14
-    assert np.allclose(A.diagonal(), 4.0)
     assert np.diff(A.indptr).max() <= 5
     return True
