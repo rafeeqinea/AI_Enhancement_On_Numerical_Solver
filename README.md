@@ -4,91 +4,49 @@ BSc Final Year Project — University of Greenwich, 2025-26
 
 Supervised by Dr Peter Soar
 
-## What this is
+## v3 — Variable-coefficient Poisson
 
-This project uses neural networks to speed up the Conjugate Gradient (CG) method for solving the 2D Poisson equation. Instead of replacing the solver, the neural network works alongside it — either by predicting a good starting point (warm-start) or by acting as a preconditioner that reshapes the problem so CG converges faster.
+This branch extends the solver to handle spatially varying diffusion coefficients: -div(D(x) grad u) = f. When D(x) is not constant, the stencil changes at every grid point and the system becomes harder to solve.
 
-The core experiment is an 8-case factorial that isolates each component's contribution: does the starting point help? does the preconditioner help? does the loss function matter? what happens when you combine them?
+### What changed from v2
 
-## Results
+The constant-coefficient Poisson has a uniform stencil: every node sees the same [-1, 4, -1] pattern. The condition-loss U-Net preconditioner trained on this operator reduces CG iterations by 78-94%.
 
-Tested on the 2D Poisson equation with 5-point FDM stencil, Dirichlet boundaries, random Gaussian blob source terms.
+Variable coefficients break this. The stencil weights now depend on the local D(x) values (using harmonic averaging at cell faces). The operator A changes for every different D(x) field. A preconditioner trained on one A cannot invert a different A.
 
-| Case | Initial guess | Preconditioner | Loss | Solver | N=32 iters | N=64 iters | N=128 iters |
-|------|--------------|----------------|------|--------|-----------|-----------|------------|
-| 1 | Zero | None | — | CG | 81 | 162 | 324 |
-| 2 | U-Net | None | MSE | CG | 87 | 176 | — |
-| 3 | Zero | Jacobi | — | PCG | 81 | 162 | 324 |
-| 4 | Zero | IC(0) | — | PCG | 28 | 54 | 105 |
-| 6 | Zero | U-Net | MSE | FCG | >1000 | >1000 | — |
-| 7 | Zero | U-Net | Condition | FCG | **13** | **27** | **20** |
-| 8 | U-Net | U-Net | Condition | FCG | **11** | 45 | — |
+### Three coefficient patterns
 
-The condition-loss preconditioner (Case 7) reduces iterations by 78-94%. The MSE-trained preconditioner (Case 6) fails completely — spectral bias makes it only handle low-frequency residuals, while the condition loss forces uniform spectral coverage via Hutchinson random probes.
+- **Smooth** — Gaussian bump in D(x). Condition number around 700. CG needs ~130 iterations at N=32.
+- **Discontinuous** — Circular inclusion with contrast up to 67:1. Condition number around 18,700. CG needs ~490 iterations.
+- **Layered** — Piecewise constant bands. Condition number around 2,700. CG needs ~280 iterations.
 
-## How it works
+### Results at N=32
 
-**Warm-start (v1):** A U-Net predicts the solution field from the source term. CG starts from this prediction instead of zero. On small grids this actually hurts (-7 to -9%) because the prediction error in the A-norm is larger than the benefit. Consistent with the NOWS paper (Eshaghi 2025), which shows warm-start helps more at larger grid sizes.
+| Pattern | CG | IC(0)+PCG | NN+FCG |
+|---------|-----|-----------|--------|
+| Smooth | 130 | 30 (77%) | >1000 (fails) |
+| Discontinuous | 491 | 36 (93%) | >1000 (fails) |
+| Layered | 141 | 29 (80%) | >1000 (fails) |
 
-**Learned preconditioner (v2):** A separate U-Net is trained to approximate the inverse operator A^{-1}. At each FCG iteration, the residual is fed through the U-Net to produce a preconditioned search direction. The training loss matters more than the architecture:
+IC(0) adapts per-problem because it is recomputed from each A. The U-Net preconditioner fails because it only sees the residual vector, not the coefficient field D(x). It has no way to know which operator it should be inverting.
 
-- MSE loss: the U-Net learns to match A^{-1}r in pixel space. This captures low-frequency patterns but ignores high-frequency structure. After a few CG iterations remove the low-frequency content, the U-Net outputs near-constant values. FCG cannot converge.
+### What this means
 
-- Condition loss: ||I - AM||^2_F estimated via Hutchinson trace with 32 random probes per step. This directly measures how close the preconditioned system is to identity. Random probes span all frequencies, so the U-Net has to handle all of them. FCG converges in 9-27 iterations.
+The preconditioner needs to either (a) take D(x) as an additional input channel so it can condition on the coefficient, or (b) use MD-PNOP's equation recast approach where you train on a reference D0 and decompose new D(x) as D0 plus perturbation source terms.
 
-**Variable coefficients (v3):** The preconditioner trained on one operator cannot handle a different operator — it only sees the residual, not the coefficient field D(x). IC(0) adapts automatically because it is recomputed from each A. MD-PNOP's equation recast approach would fix this by decomposing parameter changes into additional source terms (in progress).
+Both are future work. The negative result here shows where the constant-coefficient approach breaks down and why parametric generalisation matters.
 
-## Project structure
+### What's here
 
-```
-src/
-  data/          poisson.py, generate.py, dataset.py, precond_dataset.py
-  solvers/       cg.py, pcg.py, fcg.py, preconditioners.py, direct.py
-  models/        unet.py, cnn.py
-  training/      train.py, train_precond.py, losses.py
-  evaluation/    evaluate.py, evaluate_precond.py, nn_preconditioner.py
-  utils/         metrics.py, visualize.py
+- `src/data/poisson.py` — now includes `assemble_variable_poisson_2d(N, D)` with harmonic face averaging
+- `src/data/poisson.py` — `generate_diffusion_coefficient(X, Y, rng, pattern)` for smooth/discontinuous/layered D(x)
+- `experiments/run_variable_coeff.py` — trains per-pattern condition-loss models, evaluates CG vs IC(0) vs NN
+- `tests/test_variable_poisson.py` — symmetry, positive definiteness, constant-D equivalence
 
-experiments/
-  run_baseline.py          Case 1
-  run_warmstart.py         Case 2
-  run_preconditioned.py    Cases 3-4
-  run_nn_precond.py        Case 6
-  run_condition_loss.py    Case 7
-  run_factorial.py         All cases
+### Tests
 
-tests/                     118 tests
-```
-
-## Branch and tag structure
-
-| Branch | What it contains |
-|--------|-----------------|
-| main | Base |
-| v0-rebuild | Poisson assembly, CG solver, baseline experiments |
-| v1-warmstart-rebuild | U-Net/CNN warm-start training and evaluation |
-| v2-preconditioner | PCG, FCG, IC(0), learned preconditioner, 8-case factorial |
-| v3-variable-coefficient | Variable-coefficient Poisson, diffusion coefficient generators |
-
-Tags follow the pattern `vX.Y-rebuild` (e.g. `v2.4-rebuild` for the full factorial).
-
-## Requirements
-
-- Python 3.12
-- PyTorch (CUDA)
-- NumPy, SciPy, Matplotlib
-
-## Running
+118 tests.
 
 ```bash
-python experiments/run_factorial.py
 python -m pytest tests/ -v
 ```
-
-## Papers this builds on
-
-- NOWS (Eshaghi 2025) — neural operator warm-starts for CG
-- NPO (Li 2025) — condition loss ||I-AM||^2_F via Hutchinson for learned preconditioners
-- FCG-NO (Rudikov 2024) — flexible CG with neural operator preconditioner
-- Azulay & Treister (2022) — U-Net as multigrid V-cycle analogy
-- MD-PNOP (Cheng 2025) — equation recast for parametric generalisation
