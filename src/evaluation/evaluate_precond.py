@@ -23,6 +23,7 @@ def evaluate_preconditioner(
     seed: int = 99,
     use_fcg: bool = False,
     m_max: int = 20,
+    max_iter: int = 1000,
     x0_fn: Callable[[np.ndarray, int], np.ndarray] | None = None,
 ) -> dict[str, Any]:
     rng = np.random.default_rng(seed)
@@ -48,7 +49,7 @@ def evaluate_preconditioner(
 
         x0 = x0_fn(f, N) if x0_fn is not None else None
 
-        kwargs: dict[str, Any] = {'tol': tol}
+        kwargs: dict[str, Any] = {'tol': tol, 'max_iter': max_iter}
         if use_fcg:
             kwargs['m_max'] = m_max
 

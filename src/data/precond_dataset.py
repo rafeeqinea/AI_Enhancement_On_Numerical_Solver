@@ -71,9 +71,9 @@ class PrecondDataset(Dataset):
         self.normalise = normalise
 
         if normalise:
-            self.res_mean = float(self.residuals.mean())
+            self.res_mean = 0.0
             self.res_std = float(self.residuals.std()) + 1e-8
-            self.err_mean = float(self.errors.mean())
+            self.err_mean = 0.0
             self.err_std = float(self.errors.std()) + 1e-8
         else:
             self.res_mean = 0.0

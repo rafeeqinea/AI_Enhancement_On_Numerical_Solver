@@ -20,8 +20,8 @@ from src.evaluation.evaluate_precond import evaluate_preconditioner
 RESULTS_DIR = os.path.join(os.path.dirname(__file__), '..', 'results', 'nn_precond')
 DATA_DIR = os.path.join(os.path.dirname(__file__), '..', 'data', 'processed')
 EVAL_SIZES = [16, 32, 64]
-EPOCHS = 500
-PATIENCE = 50
+EPOCHS = 300
+PATIENCE = 30
 LR = 1e-3
 WEIGHT_DECAY = 1e-4
 NUM_PROBES = 32

@@ -19,11 +19,11 @@ from src.data.poisson import assemble_poisson_2d
 RESULTS_DIR = os.path.join(os.path.dirname(__file__), '..', 'results', 'nn_precond')
 DATA_DIR = os.path.join(os.path.dirname(__file__), '..', 'data', 'processed')
 EVAL_SIZES = [16, 32, 64]
-NUM_SYSTEMS = 100
-CG_ITERS = 100
+NUM_SYSTEMS = 50
+CG_ITERS = 50
 SEED = 42
-EPOCHS = 500
-PATIENCE = 50
+EPOCHS = 150
+PATIENCE = 30
 BATCH_SIZE = 64
 LR = 1e-3
 WEIGHT_DECAY = 1e-4
