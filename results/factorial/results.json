@@ -1,0 +1,155 @@
+{
+  "N16": {
+    "Case 1": {
+      "mean_iters": 40.6,
+      "std_iters": 1.0583005244258363,
+      "mean_time": 0.00032175199994526337,
+      "mean_error": 3.995358509711268e-08,
+      "reduction_pct": 0.0
+    },
+    "Case 2": {
+      "mean_iters": 43.58,
+      "std_iters": 0.6029925372672534,
+      "mean_time": 0.00036142800012385124,
+      "mean_error": 3.5465165514908255e-08,
+      "reduction_pct": -7.3399014778325
+    },
+    "Case 3": {
+      "mean_iters": 40.6,
+      "std_iters": 1.0583005244258363,
+      "mean_time": 0.0003801219999877503,
+      "mean_error": 3.995358509711268e-08,
+      "reduction_pct": 0.0
+    },
+    "Case 4": {
+      "mean_iters": 15.72,
+      "std_iters": 0.4915282290977803,
+      "mean_time": 0.007794614000067668,
+      "mean_error": 3.672817893161957e-08,
+      "reduction_pct": 61.28078817733991
+    },
+    "Case 5": {
+      "mean_iters": 16.18,
+      "std_iters": 0.5173006862551025,
+      "mean_time": 0.007961751999955595,
+      "mean_error": 4.8411626700995186e-08,
+      "reduction_pct": 60.14778325123154
+    },
+    "Case 7": {
+      "mean_iters": 9.0,
+      "std_iters": 0.0,
+      "mean_time": 0.01947173799997472,
+      "mean_error": 2.293383047941156e-08,
+      "reduction_pct": 77.83251231527095
+    },
+    "Case 8": {
+      "mean_iters": 9.04,
+      "std_iters": 0.19595917942265423,
+      "mean_time": 0.018823085999974863,
+      "mean_error": 4.0302232360510186e-08,
+      "reduction_pct": 77.73399014778326
+    }
+  },
+  "N32": {
+    "Case 1": {
+      "mean_iters": 80.58,
+      "std_iters": 1.9296631830451654,
+      "mean_time": 0.0008664979999775823,
+      "mean_error": 3.310291875067516e-08,
+      "reduction_pct": 0.0
+    },
+    "Case 2": {
+      "mean_iters": 86.84,
+      "std_iters": 1.1377170122662312,
+      "mean_time": 0.0009350939999785623,
+      "mean_error": 2.9419335438954954e-08,
+      "reduction_pct": -7.768677091089615
+    },
+    "Case 3": {
+      "mean_iters": 80.58,
+      "std_iters": 1.9296631830451654,
+      "mean_time": 0.0009552899999835063,
+      "mean_error": 3.310291875067516e-08,
+      "reduction_pct": 0.0
+    },
+    "Case 4": {
+      "mean_iters": 28.18,
+      "std_iters": 0.7124605252222751,
+      "mean_time": 0.015948714000023755,
+      "mean_error": 3.7385887938862994e-08,
+      "reduction_pct": 65.02854306279472
+    },
+    "Case 5": {
+      "mean_iters": 29.78,
+      "std_iters": 0.7291090453423275,
+      "mean_time": 0.01674159000000145,
+      "mean_error": 3.1925441671556495e-08,
+      "reduction_pct": 63.042938694465136
+    },
+    "Case 7": {
+      "mean_iters": 12.74,
+      "std_iters": 1.1968291440301744,
+      "mean_time": 0.025257370000053923,
+      "mean_error": 2.3768707224276148e-08,
+      "reduction_pct": 84.18962521717548
+    },
+    "Case 8": {
+      "mean_iters": 11.02,
+      "std_iters": 0.42379240200834184,
+      "mean_time": 0.02165272399994137,
+      "mean_error": 3.716916471680425e-08,
+      "reduction_pct": 86.32414991312982
+    }
+  },
+  "N64": {
+    "Case 1": {
+      "mean_iters": 161.48,
+      "std_iters": 4.167685208841954,
+      "mean_time": 0.0034650979999423727,
+      "mean_error": 2.5566083770604766e-08,
+      "reduction_pct": 0.0
+    },
+    "Case 2": {
+      "mean_iters": 175.9,
+      "std_iters": 3.5227829907617076,
+      "mean_time": 0.003807694000097399,
+      "mean_error": 2.5211154773086414e-08,
+      "reduction_pct": -8.929898439435235
+    },
+    "Case 3": {
+      "mean_iters": 161.48,
+      "std_iters": 4.167685208841954,
+      "mean_time": 0.003975534000019252,
+      "mean_error": 2.5566083770604766e-08,
+      "reduction_pct": 0.0
+    },
+    "Case 4": {
+      "mean_iters": 54.04,
+      "std_iters": 1.482700239428051,
+      "mean_time": 0.05070422800001324,
+      "mean_error": 3.0915551703107944e-08,
+      "reduction_pct": 66.53455536289323
+    },
+    "Case 5": {
+      "mean_iters": 56.2,
+      "std_iters": 2.5059928172283334,
+      "mean_time": 0.05251650999991398,
+      "mean_error": 5.016194122833327e-08,
+      "reduction_pct": 65.19692841218728
+    },
+    "Case 7": {
+      "mean_iters": 27.02,
+      "std_iters": 5.591028527918633,
+      "mean_time": 0.05831514200001038,
+      "mean_error": 1.4460146011768001e-08,
+      "reduction_pct": 83.26727768144661
+    },
+    "Case 8": {
+      "mean_iters": 45.36,
+      "std_iters": 10.514295031051773,
+      "mean_time": 0.09481906800001524,
+      "mean_error": 1.2832065245501124e-08,
+      "reduction_pct": 71.90983403517464
+    }
+  }
+}
