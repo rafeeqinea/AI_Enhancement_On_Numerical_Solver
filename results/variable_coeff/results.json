@@ -1,0 +1,41 @@
+{
+  "smooth": {
+    "pattern": "smooth",
+    "N": 32,
+    "D_ref_range": [
+      1.3363251983804632,
+      4.9987611883076575
+    ],
+    "cg_mean": 130.35,
+    "ic0_mean": 29.75,
+    "nn_mean": 1000.0,
+    "ic0_reduction": 0.7717683160721135,
+    "nn_reduction": -6.671653241273495
+  },
+  "discontinuous": {
+    "pattern": "discontinuous",
+    "N": 32,
+    "D_ref_range": [
+      1.0,
+      72.76312261534275
+    ],
+    "cg_mean": 490.55,
+    "ic0_mean": 35.6,
+    "nn_mean": 1000.0,
+    "ic0_reduction": 0.9274283966975844,
+    "nn_reduction": -1.0385281826521253
+  },
+  "layered": {
+    "pattern": "layered",
+    "N": 32,
+    "D_ref_range": [
+      7.003943487687702,
+      8.600119407122687
+    ],
+    "cg_mean": 141.25,
+    "ic0_mean": 28.95,
+    "nn_mean": 1000.0,
+    "ic0_reduction": 0.7950442477876106,
+    "nn_reduction": -6.079646017699115
+  }
+}
