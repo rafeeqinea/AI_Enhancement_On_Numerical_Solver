@@ -11,10 +11,6 @@ import scipy.sparse as sp
 def make_nn_preconditioner(
     model: nn.Module,
     N: int,
-    res_mean: float = 0.0,
-    res_std: float = 1.0,
-    err_mean: float = 0.0,
-    err_std: float = 1.0,
     device: torch.device | None = None,
 ) -> Preconditioner:
     if device is None:

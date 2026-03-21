@@ -75,13 +75,7 @@ def run_experiment():
             model.load_state_dict(torch.load(model_path, map_location=device, weights_only=True))
             model = model.to(device)
 
-        ds = PrecondDataset(data_dir, normalise=True)
-        nn_precond = make_nn_preconditioner(
-            model, N,
-            res_mean=ds.res_mean, res_std=ds.res_std,
-            err_mean=ds.err_mean, err_std=ds.err_std,
-            device=device,
-        )
+        nn_precond = make_nn_preconditioner(model, N, device=device)
 
         print(f'  Evaluating Case 6: FCG with NN preconditioner ...')
         eval_result = evaluate_preconditioner(

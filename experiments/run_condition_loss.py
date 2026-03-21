@@ -7,6 +7,7 @@ import time
 
 import numpy as np
 import torch
+import torch.nn as nn
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
@@ -39,7 +40,6 @@ def train_with_condition_loss(
     save_dir: str,
     device: torch.device,
 ) -> dict:
-    import torch.nn as nn
 
     model = model.to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
@@ -168,5 +168,4 @@ def run_experiment():
 
 
 if __name__ == '__main__':
-    import torch.nn as nn
     run_experiment()

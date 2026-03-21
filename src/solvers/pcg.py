@@ -1,13 +1,14 @@
 import time
 
 import numpy as np
+import scipy.sparse as sp
 
 from src.solvers.cg import CGResult
 from src.solvers.preconditioners import Preconditioner
 
 
 def preconditioned_cg(
-    A,
+    A: sp.spmatrix,
     b: np.ndarray,
     precond: Preconditioner,
     x0: np.ndarray | None = None,
