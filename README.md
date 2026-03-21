@@ -4,91 +4,49 @@ BSc Final Year Project — University of Greenwich, 2025-26
 
 Supervised by Dr Peter Soar
 
-## What this is
+## v1 — Warm-start with neural networks
 
-This project uses neural networks to speed up the Conjugate Gradient (CG) method for solving the 2D Poisson equation. Instead of replacing the solver, the neural network works alongside it — either by predicting a good starting point (warm-start) or by acting as a preconditioner that reshapes the problem so CG converges faster.
+This branch adds neural network warm-starting on top of the v0 baseline. A CNN and U-Net are trained to predict the Poisson solution from the source term, and CG starts from that prediction instead of zero.
 
-The core experiment is an 8-case factorial that isolates each component's contribution: does the starting point help? does the preconditioner help? does the loss function matter? what happens when you combine them?
+### The idea
 
-## Results
+CG converges from whatever starting point you give it. If the starting point is already close to the answer, CG should need fewer iterations to reach the tolerance. A neural network that has seen thousands of (source, solution) pairs should be able to predict a reasonable starting guess.
 
-Tested on the 2D Poisson equation with 5-point FDM stencil, Dirichlet boundaries, random Gaussian blob source terms.
+### What happened
 
-| Case | Initial guess | Preconditioner | Loss | Solver | N=32 iters | N=64 iters | N=128 iters |
-|------|--------------|----------------|------|--------|-----------|-----------|------------|
-| 1 | Zero | None | — | CG | 81 | 162 | 324 |
-| 2 | U-Net | None | MSE | CG | 87 | 176 | — |
-| 3 | Zero | Jacobi | — | PCG | 81 | 162 | 324 |
-| 4 | Zero | IC(0) | — | PCG | 28 | 54 | 105 |
-| 6 | Zero | U-Net | MSE | FCG | >1000 | >1000 | — |
-| 7 | Zero | U-Net | Condition | FCG | **13** | **27** | **20** |
-| 8 | U-Net | U-Net | Condition | FCG | **11** | 45 | — |
+It didn't work. At grid sizes N=16 to N=64, warm-starting with the neural network prediction made CG take MORE iterations, not fewer.
 
-The condition-loss preconditioner (Case 7) reduces iterations by 78-94%. The MSE-trained preconditioner (Case 6) fails completely — spectral bias makes it only handle low-frequency residuals, while the condition loss forces uniform spectral coverage via Hutchinson random probes.
+| N | CG (cold) | CNN warm-start | U-Net warm-start |
+|---|-----------|---------------|-----------------|
+| 16 | 41 | 44 (+7.9%) | 44 (+7.3%) |
+| 32 | 81 | 90 (+10.8%) | 87 (+7.4%) |
+| 64 | 167 | 186 (+11.6%) | 180 (+7.9%) |
 
-## How it works
+The CNN generalised well (val_loss=0.081, gap=1.1x) but warm-start still hurt. The U-Net overfit badly (val_loss=0.85, gap=227x).
 
-**Warm-start (v1):** A U-Net predicts the solution field from the source term. CG starts from this prediction instead of zero. On small grids this actually hurts (-7 to -9%) because the prediction error in the A-norm is larger than the benefit. Consistent with the NOWS paper (Eshaghi 2025), which shows warm-start helps more at larger grid sizes.
+### Why it failed
 
-**Learned preconditioner (v2):** A separate U-Net is trained to approximate the inverse operator A^{-1}. At each FCG iteration, the residual is fed through the U-Net to produce a preconditioned search direction. The training loss matters more than the architecture:
+The NOWS paper (Eshaghi 2025) reports the same pattern: at N=64, their warm-start only gets 23.7% speedup even with a spectral neural operator. Our negative results are consistent with the literature for small grids. The reasons:
 
-- MSE loss: the U-Net learns to match A^{-1}r in pixel space. This captures low-frequency patterns but ignores high-frequency structure. After a few CG iterations remove the low-frequency content, the U-Net outputs near-constant values. FCG cannot converge.
+1. CG convergence depends on the A-norm error, not pixel MSE. A prediction with low MSE can have high A-norm error if it gets high-frequency modes wrong.
+2. At small N, CG only needs 40-167 iterations. The warm-start savings are tiny in absolute terms.
+3. The inference cost of running the U-Net eats whatever iteration savings exist.
 
-- Condition loss: ||I - AM||^2_F estimated via Hutchinson trace with 32 random probes per step. This directly measures how close the preconditioned system is to identity. Random probes span all frequencies, so the U-Net has to handle all of them. FCG converges in 9-27 iterations.
+This negative result motivates the preconditioner approach in v2, where we change the convergence rate itself rather than just the starting point.
 
-**Variable coefficients (v3):** The preconditioner trained on one operator cannot handle a different operator — it only sees the residual, not the coefficient field D(x). IC(0) adapts automatically because it is recomputed from each A. MD-PNOP's equation recast approach would fix this by decomposing parameter changes into additional source terms (in progress).
+### What's here
 
-## Project structure
+- `src/models/cnn.py` — 7-layer CNN baseline (~195K params)
+- `src/models/unet.py` — U-Net with configurable depth/width
+- `src/data/dataset.py` — PyTorch dataset with normalisation and padding
+- `src/training/train.py` — Training pipeline with early stopping, LR scheduling, snapshots
+- `src/evaluation/evaluate.py` — Cold vs warm CG comparison
+- `experiments/run_warmstart.py` — Full experiment runner
 
-```
-src/
-  data/          poisson.py, generate.py, dataset.py, precond_dataset.py
-  solvers/       cg.py, pcg.py, fcg.py, preconditioners.py, direct.py
-  models/        unet.py, cnn.py
-  training/      train.py, train_precond.py, losses.py
-  evaluation/    evaluate.py, evaluate_precond.py, nn_preconditioner.py
-  utils/         metrics.py, visualize.py
+### Tests
 
-experiments/
-  run_baseline.py          Case 1
-  run_warmstart.py         Case 2
-  run_preconditioned.py    Cases 3-4
-  run_nn_precond.py        Case 6
-  run_condition_loss.py    Case 7
-  run_factorial.py         All cases
-
-tests/                     118 tests
-```
-
-## Branch and tag structure
-
-| Branch | What it contains |
-|--------|-----------------|
-| main | Base |
-| v0-rebuild | Poisson assembly, CG solver, baseline experiments |
-| v1-warmstart-rebuild | U-Net/CNN warm-start training and evaluation |
-| v2-preconditioner | PCG, FCG, IC(0), learned preconditioner, 8-case factorial |
-| v3-variable-coefficient | Variable-coefficient Poisson, diffusion coefficient generators |
-
-Tags follow the pattern `vX.Y-rebuild` (e.g. `v2.4-rebuild` for the full factorial).
-
-## Requirements
-
-- Python 3.12
-- PyTorch (CUDA)
-- NumPy, SciPy, Matplotlib
-
-## Running
+69 tests.
 
 ```bash
-python experiments/run_factorial.py
 python -m pytest tests/ -v
 ```
-
-## Papers this builds on
-
-- NOWS (Eshaghi 2025) — neural operator warm-starts for CG
-- NPO (Li 2025) — condition loss ||I-AM||^2_F via Hutchinson for learned preconditioners
-- FCG-NO (Rudikov 2024) — flexible CG with neural operator preconditioner
-- Azulay & Treister (2022) — U-Net as multigrid V-cycle analogy
-- MD-PNOP (Cheng 2025) — equation recast for parametric generalisation
