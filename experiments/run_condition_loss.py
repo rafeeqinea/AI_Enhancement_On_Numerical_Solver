@@ -52,14 +52,19 @@ def train_with_condition_loss(
     history: dict[str, list[float]] = {'train_loss': [], 'lr': []}
     start_time = time.perf_counter()
 
+    steps_per_epoch = 100
+
     for epoch in range(1, epochs + 1):
         model.train()
-        optimizer.zero_grad()
-        loss = loss_fn(model, device)
-        loss.backward()
-        optimizer.step()
+        epoch_losses = []
+        for _ in range(steps_per_epoch):
+            optimizer.zero_grad()
+            loss = loss_fn(model, device)
+            loss.backward()
+            optimizer.step()
+            epoch_losses.append(loss.item())
 
-        loss_val = loss.item()
+        loss_val = float(np.mean(epoch_losses))
         current_lr = optimizer.param_groups[0]['lr']
         history['train_loss'].append(loss_val)
         history['lr'].append(current_lr)
