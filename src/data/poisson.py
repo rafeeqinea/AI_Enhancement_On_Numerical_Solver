@@ -100,10 +100,40 @@ def generate_diffusion_coefficient(X: np.ndarray, Y: np.ndarray, rng: np.random.
         return np.ones_like(X)
 
 
-def validate_matrix(A, N):
-    n = N * N
+def assemble_poisson_3d(N: int) -> sp.csr_matrix:
+    """Assemble 3D Poisson matrix (-nabla^2 u = f) on [0,1]^3 with zero Dirichlet BCs.
+
+    7-point stencil, N^3 interior DOFs.
+    """
+    T = sp.diags([-1, 2, -1], [-1, 0, 1], shape=(N, N), format='csr')
+    I = sp.eye(N, format='csr')
+    I2 = sp.eye(N * N, format='csr')
+    # A = I_N ⊗ I_N ⊗ T + I_N ⊗ T ⊗ I_N + T ⊗ I_N ⊗ I_N
+    A = (sp.kron(I2, T, format='csr')
+         + sp.kron(sp.kron(I, T, format='csr'), I, format='csr')
+         + sp.kron(T, I2, format='csr'))
+    return A
+
+
+def get_grid_points_3d(N: int):
+    """Return (X, Y, Z) meshgrid for N interior points per axis on [0,1]^3."""
+    h = 1.0 / (N + 1)
+    coords = np.linspace(h, 1.0 - h, N)
+    return np.meshgrid(coords, coords, coords, indexing='ij')
+
+
+def assemble_rhs_3d(f: np.ndarray, N: int) -> np.ndarray:
+    """Scale 3D source term by h^2 and flatten."""
+    h = 1.0 / (N + 1)
+    return (h ** 2) * f.ravel()
+
+
+def validate_matrix(A, N, dim: int = 2):
+    n = N ** dim
     assert A.shape == (n, n)
     diff = A - A.T
     assert diff.nnz == 0 or abs(diff).max() < 1e-14
-    assert np.diff(A.indptr).max() <= 5
+    max_nnz_per_row = np.diff(A.indptr).max()
+    expected_max = 2 * dim + 1  # 5 for 2D, 7 for 3D
+    assert max_nnz_per_row <= expected_max
     return True

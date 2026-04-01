@@ -23,6 +23,26 @@ def generate_source_term(X, Y, rng, num_blobs=None):
     return f
 
 
+def generate_source_term_3d(X, Y, Z, rng, num_blobs=None):
+    if num_blobs is None:
+        num_blobs = rng.integers(3, 8)
+
+    N = X.shape[0]
+    f = np.zeros((N, N, N))
+
+    for _ in range(num_blobs):
+        cx = rng.uniform(0.1, 0.9)
+        cy = rng.uniform(0.1, 0.9)
+        cz = rng.uniform(0.1, 0.9)
+        amp = rng.uniform(0.5, 5.0)
+        sigma = rng.uniform(0.05, 0.3)
+        f += amp * np.exp(
+            -((X - cx)**2 + (Y - cy)**2 + (Z - cz)**2) / (2 * sigma**2)
+        )
+
+    return f
+
+
 def generate_dataset(N, num_samples, seed, base_dir='data/processed'):
     rng = np.random.default_rng(seed)
     folder = os.path.join(base_dir, f'N{N}_{num_samples}samples_seed{seed}')
