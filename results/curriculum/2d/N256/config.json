@@ -1,0 +1,12 @@
+{
+  "N": 256,
+  "dim": 2,
+  "epochs": 100,
+  "steps": 100,
+  "lr": 0.0003,
+  "probes": 128,
+  "probe_batch": 128,
+  "best_loss": 9.740403909683227,
+  "training_time_s": 4853.077774524689,
+  "is_scratch": false
+}

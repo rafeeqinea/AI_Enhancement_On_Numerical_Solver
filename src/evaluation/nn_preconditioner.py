@@ -93,3 +93,27 @@ def make_composite_preconditioner(
         return e
 
     return apply
+
+
+def make_ic0_nn_preconditioner(
+    model: nn.Module,
+    A: sp.spmatrix,
+    N: int,
+    ic0_fn,
+    device: torch.device | None = None,
+    dim: int = 2,
+) -> Preconditioner:
+    """Case 9: IC(0) + U-Net combined preconditioner.
+
+    IC(0) provides the base correction, U-Net handles the leftover.
+    z = IC(0)^{-1}(r) + UNet(r - A * IC(0)^{-1}(r))
+    """
+    nn_precond = make_nn_preconditioner(model, N, device=device, dim=dim)
+
+    def apply(r: np.ndarray) -> np.ndarray:
+        z1 = ic0_fn(r)                    # IC(0) base correction
+        leftover = r - A @ z1             # what IC(0) missed
+        z2 = nn_precond(leftover)          # NN corrects the leftover
+        return z1 + z2                     # combined
+
+    return apply
