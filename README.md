@@ -6,7 +6,24 @@ Supervised by Dr Peter Soar
 
 ## v4-combined — Combined Preconditioner System
 
-This branch is where everything comes together. Versions 0 through 3 tested each ingredient separately. Version 5 extended to 3D. This branch stacks them into one unified system and tests every meaningful combination.
+This branch combines all ingredients into one system. Versions 0-3 tested each ingredient separately. This branch stacks them.
+
+### Case 9 Results (IC(0) + U-Net Combined)
+
+The combined preconditioner applies IC(0) first, then the U-Net corrects what IC(0) missed:
+
+```
+z = IC(0)⁻¹(r) + UNet(r - A × IC(0)⁻¹(r))
+```
+
+| Grid | CG | IC(0) | NN alone | IC(0)+NN (Case 9) |
+|------|-----|-------|----------|-------------------|
+| 2D N=32 | 84.8 | 28.5 (66%) | 10.3 (88%) | 8.7 (90%) |
+| 2D N=64 | 165.1 | 51.2 (69%) | 44.4 (73%) | 17.3 (90%) |
+| 2D N=128 | 323.0 | 96.6 (70%) | 17.5 (95%) | 15.5 (95%) |
+| 3D N=32 | 98.2 | 34.9 (65%) | 19.5 (80%) | 13.4 (86%) |
+
+Case 9 is the best at every grid size. The combined system beats both IC(0) alone and NN alone.
 
 ### What We've Proven So Far (Cases 1-8)
 
