@@ -39,12 +39,8 @@ The key finding: the loss function matters more than the architecture. The same 
 
 | Case | Warm-Start | Preconditioner | Recast | Target Problem | Status |
 |------|-----------|----------------|--------|---------------|--------|
-| 9 | Yes | IC(0) + U-Net | No | Constant coeff | TODO |
-| 10 | No | IC(0) + U-Net | No | Constant coeff | TODO |
-| 11 | No | U-Net | Yes | Variable coeff | TODO |
-| 12 | No | IC(0) + U-Net | Yes | Variable coeff | TODO |
-| 13 | Yes | U-Net | Yes | Variable coeff | TODO |
-| 14 | Yes | IC(0) + U-Net | Yes | Variable coeff (full stack) | TODO |
+| 9 | Yes | IC(0) + U-Net | No | 8.7 (90%) | 15.5 (95%) | DONE |
+| 10-14 | Various | Various | Yes | — | — | Future work |
 
 ---
 
