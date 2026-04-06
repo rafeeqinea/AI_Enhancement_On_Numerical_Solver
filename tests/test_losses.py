@@ -54,8 +54,26 @@ class TestConditionLoss:
 
     def test_sparse_matrix_shape(self, small_system):
         A, N = small_system
-        loss_fn = ConditionLoss(A, N, num_probes=4)
+        loss_fn = ConditionLoss(A, N, num_probes=4, mode='sparse')
         assert loss_fn.A_torch.shape == (N * N, N * N)
+
+    def test_conv_mode_has_stencil_kernel(self, small_system):
+        A, N = small_system
+        loss_fn = ConditionLoss(A, N, num_probes=4, mode='conv')
+        assert hasattr(loss_fn, 'stencil_kernel')
+        assert loss_fn.stencil_kernel.shape == (1, 1, 3, 3)
+
+    def test_conv_and_sparse_agree(self, small_system):
+        A, N = small_system
+        model = UNet(base_features=4, levels=1)
+        device = torch.device('cpu')
+        loss_sparse = ConditionLoss(A, N, num_probes=8, mode='sparse')
+        loss_conv = ConditionLoss(A, N, num_probes=8, mode='conv')
+        torch.manual_seed(42)
+        val_sparse = loss_sparse(model, device).item()
+        torch.manual_seed(42)
+        val_conv = loss_conv(model, device).item()
+        assert abs(val_sparse - val_conv) < 0.5
 
     def test_zero_model_gives_large_loss(self, small_system):
         A, N = small_system

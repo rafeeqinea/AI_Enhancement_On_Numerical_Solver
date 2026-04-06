@@ -63,7 +63,7 @@ Equation recast works for small perturbations. NN is 2.5x faster than IC(0) insi
 
 ## Test coverage
 
-123 tests across 13 test files. All passing.
+146 tests across 18 test files. All passing.
 
 ## Architecture
 

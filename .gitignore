@@ -12,3 +12,12 @@ venv/
 *.so
 .DS_Store
 Thumbs.db
+
+# Model checkpoints and training artefacts
+*.pt
+*.npy
+results/checkpoints/
+results/curriculum/
+results/warmstart/cnn_checkpoints/
+results/warmstart/unet_checkpoints/
+tstex_modules/
