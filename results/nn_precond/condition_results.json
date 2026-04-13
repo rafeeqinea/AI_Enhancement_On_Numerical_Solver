@@ -5,14 +5,14 @@
     "num_samples": 50,
     "cold_iters_mean": 40.6,
     "cold_iters_std": 1.0583005244258363,
-    "precond_iters_mean": 1000.0,
+    "precond_iters_mean": 9.0,
     "precond_iters_std": 0.0,
-    "iteration_reduction": -23.63054187192118,
-    "cold_time_mean": 0.0003195440000308736,
-    "precond_time_mean": 2.05695057799996,
-    "speedup": 0.0001553484091686717,
-    "mean_error": 0.0145131284512031,
-    "max_error": 0.027902937319548154
+    "iteration_reduction": 0.7783251231527094,
+    "cold_time_mean": 0.0003172319998702733,
+    "precond_time_mean": 0.026541703999973833,
+    "speedup": 0.011952209242880037,
+    "mean_error": 2.293383047941156e-08,
+    "max_error": 4.969328369737128e-08
   },
   "N32": {
     "precond_name": "NN-Condition",
@@ -20,14 +20,14 @@
     "num_samples": 50,
     "cold_iters_mean": 80.58,
     "cold_iters_std": 1.9296631830451654,
-    "precond_iters_mean": 1000.0,
-    "precond_iters_std": 0.0,
-    "iteration_reduction": -11.410027302060065,
-    "cold_time_mean": 0.000865006000003632,
-    "precond_time_mean": 2.1307545440000286,
-    "speedup": 0.00040596229276590966,
-    "mean_error": 0.004095418057760985,
-    "max_error": 0.013576230599998962
+    "precond_iters_mean": 12.74,
+    "precond_iters_std": 1.1968291440301744,
+    "iteration_reduction": 0.8418962521717548,
+    "cold_time_mean": 0.0008563719999438035,
+    "precond_time_mean": 0.02625003800003469,
+    "speedup": 0.03262364800929705,
+    "mean_error": 2.3768707224276148e-08,
+    "max_error": 1.0762398024188108e-07
   },
   "N64": {
     "precond_name": "NN-Condition",
@@ -35,13 +35,13 @@
     "num_samples": 50,
     "cold_iters_mean": 161.48,
     "cold_iters_std": 4.167685208841954,
-    "precond_iters_mean": 1000.0,
-    "precond_iters_std": 0.0,
-    "iteration_reduction": -5.19271736437949,
-    "cold_time_mean": 0.004750662000005832,
-    "precond_time_mean": 2.3249677339999653,
-    "speedup": 0.0020433238408141723,
-    "mean_error": 0.005707118557811332,
-    "max_error": 0.011025808565025124
+    "precond_iters_mean": 27.02,
+    "precond_iters_std": 5.591028527918633,
+    "iteration_reduction": 0.8326727768144662,
+    "cold_time_mean": 0.003473755999839341,
+    "precond_time_mean": 0.05999387399991974,
+    "speedup": 0.05790184510911878,
+    "mean_error": 1.4460146011768001e-08,
+    "max_error": 3.450715708113917e-08
   }
 }

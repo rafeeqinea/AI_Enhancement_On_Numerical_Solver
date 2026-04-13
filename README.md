@@ -1,103 +1,51 @@
-# AI Enhancement of Numerical Solvers
+# Learned Preconditioning for Conjugate Gradient Solvers
 
 BSc Final Year Project — University of Greenwich, 2025-26
 
+**A Controlled Factorial Evaluation of Training Objectives for the Poisson Equation**
+
 Supervised by Dr Peter Soar
 
-## v6-scaling — Scaling Study and Curriculum Training
+## Project Overview
 
-This branch pushes the preconditioner to its limits. How far can we scale? What breaks, and why?
+This project investigates whether the choice of training objective determines the effectiveness of a learned neural network preconditioner for Conjugate Gradient solvers applied to the Poisson equation. A U-Net neural network is integrated as a preconditioner within a Flexible Conjugate Gradient (FCG) framework, and two training objectives — mean squared error (MSE) and a condition-loss surrogate estimated via the Hutchinson trace estimator — are compared under matched conditions through a controlled factorial experimental design.
 
-### Curriculum Training (small to big)
+## Core Finding
 
-Instead of training a separate model for each grid size, we train on the smallest grid first and fine-tune upward. Each step inherits knowledge from the previous size.
+Under matched architecture, solver, initial guess, and evaluation conditions, the MSE-trained preconditioner did not converge at any tested grid size, while the condition-loss-trained preconditioner reduced iteration counts by 78 to 84 percent across N=16, 32, and 64. The training objective was the factor that determined whether the preconditioner converged.
 
-**2D Curriculum: N=16 → 32 → 64 → 128 → 256**
-
-| Grid | DOFs | Type | Epochs | Time | CG | NN+FCG | Reduction |
-|------|------|------|--------|------|-----|--------|-----------|
-| N=16 | 256 | scratch | 200 | 4 min | 43.9 | 6.1 | 86.2% |
-| N=32 | 1,024 | finetune | 50 | 2 min | 84.8 | 8.6 | 89.9% |
-| N=64 | 4,096 | finetune | 50 | 3 min | 165.0 | 12.1 | 92.7% |
-| N=128 | 16,384 | finetune | 50 | 13 min | 323.0 | 33.2 | 89.7% |
-| N=256 | 65,536 | finetune | 100 | 81 min | 636.4 | 114.8 | 82.0% |
-
-Total curriculum training time: 103 minutes for all 5 sizes. Compared to training each from scratch (~5+ hours).
-
-**2D Transfer Test:** The final model (trained through N=256) transfers back to all smaller sizes without retraining.
-
-### Where It Breaks
-
-**2D N=512 (262,144 DOFs) — FAILS**
-
-Attempted with two model sizes:
-- base_features=16 (483K params): fails. Model has fewer parameters than unknowns.
-- base_features=32 (1.9M params): trained ~430 epochs over 18+ hours. Does not converge.
-
-Root cause: the sparse matrix multiply in the condition loss (`torch.sparse.mm` on a 262K×262K matrix) is memory-bound. The GPU draws only 30W despite being at 100% utilization — it spends most time waiting for memory reads, not computing. Each epoch takes 6.1 minutes at N=512 vs 0.1 minutes at N=32.
-
-Future fix: replace sparse matrix multiply with convolution (`F.conv2d` with the Poisson stencil kernel). This would make the operation compute-bound instead of memory-bound, reducing training time by ~10x.
-
-**3D N=64 (262,144 DOFs) — FAILS**
-
-Fine-tuned from N=32 for 200 epochs (14.4 hours). Does not converge. The 3D operator at N=64 is harder to learn than the 2D operator at the same DOF count.
-
-**3D Curriculum: N=16 → 32**
-
-| Grid | DOFs | Type | CG | NN+FCG | Reduction |
-|------|------|------|-----|--------|-----------|
-| N=16 | 4,096 | scratch | 47 | 12 | 74.5% |
-| N=32 | 32,768 | finetune | 96 | 17 | 82.3% |
-
-3D N=64 fine-tuning from N=32 does not converge after 200 epochs.
-
-### Model Capacity Finding
-
-The number of model parameters must exceed the number of unknowns for the preconditioner to represent A⁻¹:
-
-| base_features | Params | Max working 2D N | Max working 3D N |
-|---------------|--------|-------------------|-------------------|
-| 16 | 483K | N=256 (65K DOFs) | — |
-| 32 | 1.9M | TBD (N=512 failed) | N=32 (32K DOFs) |
-| 64 | 7.6M | ~N=2,700 (est.) | ~N=280 (est.) |
-
-### Accuracy Verification
-
-All methods converge to the same solution within machine precision:
-
-| Method | Relative Error | Accuracy |
-|--------|---------------|----------|
-| CG | 6.55e-08 | 99.9999935% |
-| IC(0)+PCG | 9.47e-08 | 99.9999905% |
-| NN+FCG | 2.03e-06 | 99.9999971% |
-
-The NN solution is actually 10x more accurate than CG (fewer iterations = less accumulated roundoff). Visual comparison confirms pixel-identical solutions.
-
-### Report Figures
-
-All figures for the final report are generated in `results/report_figures/`:
-- `fig1_2d_scaling.png` — iteration count and reduction vs grid size
-- `fig2_3d_training_progression.png` — epoch-by-epoch improvement with breakthrough
-- `fig3_case_comparison.png` — 9-case bar chart
-- `fig4_curriculum.png` — curriculum training timeline
-- `fig5_2d_vs_3d.png` — 2D vs 3D comparison
-
-### Branch Structure
+## Repository Structure
 
 ```
-v0-rebuild (baseline CG)
- └── v1-warmstart-rebuild (warm-start)
-      └── v2-preconditioner (8-case factorial)
-           ├── v3-variable-coefficient (variable D(x) + equation recast)
-           ├── v4-combined (IC(0)+NN combined, Case 9)
-           ├── v5-3d (3D extension)
-           └── v6-scaling (THIS BRANCH — scaling study + curriculum)
+src/
+  data/         - Poisson assembly, source generation, dataset
+  solvers/      - CG, PCG, FCG, direct solver, preconditioners
+  models/       - Dimension-generic U-Net (2D/3D)
+  training/     - MSE and condition-loss training pipelines
+  evaluation/   - NN preconditioner wrapper, evaluation metrics
+experiments/    - Experiment scripts (factorial, curriculum, 3D, analysis)
+tests/          - 161 automated tests across 22 files
+results/        - Committed JSON artefacts, figures, checkpoints
 ```
 
-### Tests
+## Key Results (from committed artefacts)
 
-144 tests.
+| Case | Preconditioner | Loss | N=16 | N=32 | N=64 | Reduction | Source |
+|------|---------------|------|------|------|------|-----------|--------|
+| 1 | None (CG) | — | 40.6 | 80.6 | 161.5 | baseline | `results/factorial/results.json` |
+| 4 | IC(0) | — | 15.7 | 28.2 | 54.0 | 61-67% | `results/factorial/results.json` |
+| 6 | U-Net | MSE | 1000 | 1000 | 1000 | FAILS | `results/nn_precond/mse_results.json` |
+| 7 | U-Net | Condition | 9.0 | 12.7 | 27.0 | 78-84% | `results/factorial/results.json` |
+
+Note: Case 6 is not in `results/factorial/results.json` because it was run through a separate MSE training and evaluation script. Its results are in `results/nn_precond/mse_results.json`.
+
+## Testing
 
 ```bash
 python -m pytest tests/ -v
+# 161 passed (verified 2026-04-12)
 ```
+
+## Requirements
+
+Python 3.12, PyTorch 2.6+, SciPy, NumPy, matplotlib, pyamg (optional for AMG baseline)

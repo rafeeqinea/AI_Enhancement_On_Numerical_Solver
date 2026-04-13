@@ -13,6 +13,9 @@ venv/
 .DS_Store
 Thumbs.db
 
+# Report drafts (not for version control)
+report/
+
 # Model checkpoints and training artefacts
 *.pt
 *.npy
@@ -20,4 +23,5 @@ results/checkpoints/
 results/curriculum/
 results/warmstart/cnn_checkpoints/
 results/warmstart/unet_checkpoints/
+results/figures/
 tstex_modules/

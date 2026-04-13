@@ -1,0 +1,183 @@
+{
+  "description": "Paired statistical tests for core factorial comparisons",
+  "method": "Wilcoxon signed-rank test (paired, two-sided)",
+  "correction": "Holm-Bonferroni",
+  "confidence_intervals": "Bootstrap (10000 resamples, seed=42)",
+  "n_samples_per_case": 50,
+  "random_seed": 99,
+  "n_tests": 9,
+  "results": [
+    {
+      "label": "Case1_vs_Case7_N16",
+      "n_pairs": 50,
+      "mean_a": 40.6,
+      "mean_b": 9.0,
+      "mean_paired_diff": 31.6,
+      "std_paired_diff": 1.0690449676496976,
+      "median_paired_diff": 32.0,
+      "bootstrap_ci_95": [
+        31.3,
+        31.88
+      ],
+      "wilcoxon_stat": 0.0,
+      "wilcoxon_p": 1.7763568394002505e-15,
+      "effect_size_r": 1.0,
+      "wilcoxon_p_adjusted": 1.5987211554602254e-14,
+      "significant_005": true,
+      "effect_size_note": "W=0: all pairs in same direction (perfect effect)"
+    },
+    {
+      "label": "Case4_vs_Case7_N16",
+      "n_pairs": 50,
+      "mean_a": 15.72,
+      "mean_b": 9.0,
+      "mean_paired_diff": 6.72,
+      "std_paired_diff": 0.4965184913423648,
+      "median_paired_diff": 7.0,
+      "bootstrap_ci_95": [
+        6.58,
+        6.84
+      ],
+      "wilcoxon_stat": 0.0,
+      "wilcoxon_p": 1.7763568394002505e-15,
+      "effect_size_r": 1.0,
+      "wilcoxon_p_adjusted": 1.4210854715202004e-14,
+      "significant_005": true,
+      "effect_size_note": "W=0: all pairs in same direction (perfect effect)"
+    },
+    {
+      "label": "Case1_vs_Case2_N16",
+      "n_pairs": 50,
+      "mean_a": 40.6,
+      "mean_b": 43.58,
+      "mean_paired_diff": -2.98,
+      "std_paired_diff": 0.9581018649775551,
+      "median_paired_diff": -3.0,
+      "bootstrap_ci_95": [
+        -3.24,
+        -2.72
+      ],
+      "wilcoxon_stat": 0.0,
+      "wilcoxon_p": 1.7763568394002505e-15,
+      "effect_size_r": 1.0,
+      "wilcoxon_p_adjusted": 1.2434497875801753e-14,
+      "significant_005": true,
+      "effect_size_note": "W=0: all pairs in same direction (perfect effect)"
+    },
+    {
+      "label": "Case1_vs_Case7_N32",
+      "n_pairs": 50,
+      "mean_a": 80.58,
+      "mean_b": 12.74,
+      "mean_paired_diff": 67.84,
+      "std_paired_diff": 1.7304004491116252,
+      "median_paired_diff": 68.0,
+      "bootstrap_ci_95": [
+        67.36,
+        68.3
+      ],
+      "wilcoxon_stat": 0.0,
+      "wilcoxon_p": 1.7763568394002505e-15,
+      "effect_size_r": 1.0,
+      "wilcoxon_p_adjusted": 1.0658141036401503e-14,
+      "significant_005": true,
+      "effect_size_note": "W=0: all pairs in same direction (perfect effect)"
+    },
+    {
+      "label": "Case4_vs_Case7_N32",
+      "n_pairs": 50,
+      "mean_a": 28.18,
+      "mean_b": 12.74,
+      "mean_paired_diff": 15.44,
+      "std_paired_diff": 1.2803060858518902,
+      "median_paired_diff": 16.0,
+      "bootstrap_ci_95": [
+        15.06,
+        15.78
+      ],
+      "wilcoxon_stat": 0.0,
+      "wilcoxon_p": 1.7763568394002505e-15,
+      "effect_size_r": 1.0,
+      "wilcoxon_p_adjusted": 8.881784197001252e-15,
+      "significant_005": true,
+      "effect_size_note": "W=0: all pairs in same direction (perfect effect)"
+    },
+    {
+      "label": "Case1_vs_Case2_N32",
+      "n_pairs": 50,
+      "mean_a": 80.58,
+      "mean_b": 86.84,
+      "mean_paired_diff": -6.26,
+      "std_paired_diff": 1.626439707597235,
+      "median_paired_diff": -6.0,
+      "bootstrap_ci_95": [
+        -6.72,
+        -5.82
+      ],
+      "wilcoxon_stat": 0.0,
+      "wilcoxon_p": 1.7763568394002505e-15,
+      "effect_size_r": 1.0,
+      "wilcoxon_p_adjusted": 7.105427357601002e-15,
+      "significant_005": true,
+      "effect_size_note": "W=0: all pairs in same direction (perfect effect)"
+    },
+    {
+      "label": "Case1_vs_Case7_N64",
+      "n_pairs": 50,
+      "mean_a": 161.48,
+      "mean_b": 27.02,
+      "mean_paired_diff": 134.46,
+      "std_paired_diff": 4.924781151254855,
+      "median_paired_diff": 135.0,
+      "bootstrap_ci_95": [
+        133.1,
+        135.7405
+      ],
+      "wilcoxon_stat": 0.0,
+      "wilcoxon_p": 1.7763568394002505e-15,
+      "effect_size_r": 1.0,
+      "wilcoxon_p_adjusted": 5.329070518200751e-15,
+      "significant_005": true,
+      "effect_size_note": "W=0: all pairs in same direction (perfect effect)"
+    },
+    {
+      "label": "Case4_vs_Case7_N64",
+      "n_pairs": 50,
+      "mean_a": 54.04,
+      "mean_b": 27.02,
+      "mean_paired_diff": 27.02,
+      "std_paired_diff": 5.358533152927246,
+      "median_paired_diff": 26.0,
+      "bootstrap_ci_95": [
+        25.54,
+        28.48
+      ],
+      "wilcoxon_stat": 0.0,
+      "wilcoxon_p": 1.7763568394002505e-15,
+      "effect_size_r": 1.0,
+      "wilcoxon_p_adjusted": 3.552713678800501e-15,
+      "significant_005": true,
+      "effect_size_note": "W=0: all pairs in same direction (perfect effect)"
+    },
+    {
+      "label": "Case1_vs_Case2_N64",
+      "n_pairs": 50,
+      "mean_a": 161.48,
+      "mean_b": 175.9,
+      "mean_paired_diff": -14.42,
+      "std_paired_diff": 3.2955752648863315,
+      "median_paired_diff": -15.0,
+      "bootstrap_ci_95": [
+        -15.32,
+        -13.48
+      ],
+      "wilcoxon_stat": 0.0,
+      "wilcoxon_p": 1.7763568394002505e-15,
+      "effect_size_r": 1.0,
+      "wilcoxon_p_adjusted": 1.7763568394002505e-15,
+      "significant_005": true,
+      "effect_size_note": "W=0: all pairs in same direction (perfect effect)"
+    }
+  ],
+  "case6_note": "All 50 runs capped at 1000 iterations. Zero variance. Not statistically testable."
+}

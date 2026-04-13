@@ -1,0 +1,254 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.6, pytest-8.4.2, pluggy-1.6.0 -- C:\Users\rafee\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+rootdir: D:\m34\PROJECT\M34Project
+plugins: anyio-4.12.1
+collecting ... collected 161 items
+
+tests/test_cg.py::TestConjugateGradient::test_converges PASSED           [  0%]
+tests/test_cg.py::TestConjugateGradient::test_matches_direct PASSED      [  1%]
+tests/test_cg.py::TestConjugateGradient::test_warm_start_fewer_iterations PASSED [  1%]
+tests/test_cg.py::TestConjugateGradient::test_residual_history_decreasing PASSED [  2%]
+tests/test_cg.py::TestConjugateGradient::test_zero_rhs PASSED            [  3%]
+tests/test_cg.py::TestConjugateGradient::test_iteration_count_scales_with_N PASSED [  3%]
+tests/test_cg.py::TestConjugateGradient::test_timing_recorded PASSED     [  4%]
+tests/test_cg.py::TestConjugateGradient::test_max_iter_stops PASSED      [  4%]
+tests/test_cnn.py::TestBaselineCNN::test_output_shape PASSED             [  5%]
+tests/test_cnn.py::TestBaselineCNN::test_output_shape_various_N PASSED   [  6%]
+tests/test_cnn.py::TestBaselineCNN::test_parameter_count PASSED          [  6%]
+tests/test_cnn.py::TestBaselineCNN::test_gradients_flow PASSED           [  7%]
+tests/test_cnn.py::TestBaselineCNN::test_deterministic PASSED            [  8%]
+tests/test_cnn.py::TestBaselineCNN::test_custom_channels PASSED          [  8%]
+tests/test_condition_loss_pipeline.py::TestConditionLossPipeline::test_training_step_runs PASSED [  9%]
+tests/test_condition_loss_pipeline.py::TestConditionLossPipeline::test_loss_decreases_over_steps PASSED [  9%]
+tests/test_condition_loss_pipeline.py::TestConditionLossPipeline::test_trained_model_wraps_as_preconditioner PASSED [ 10%]
+tests/test_dataset.py::TestPoissonDataset::test_length PASSED            [ 11%]
+tests/test_dataset.py::TestPoissonDataset::test_output_types PASSED      [ 11%]
+tests/test_dataset.py::TestPoissonDataset::test_input_shape_padded PASSED [ 12%]
+tests/test_dataset.py::TestPoissonDataset::test_boundary_is_zero PASSED  [ 13%]
+tests/test_dataset.py::TestPoissonDataset::test_interior_matches_source PASSED [ 13%]
+tests/test_dataset.py::TestPoissonDataset::test_normalisation PASSED     [ 14%]
+tests/test_dataset.py::TestPoissonDataset::test_dtype_float32 PASSED     [ 14%]
+tests/test_dataset.py::TestPoissonDataset::test_dataloader_compatible PASSED [ 15%]
+tests/test_direct.py::TestSolveDirect::test_returns_result PASSED        [ 16%]
+tests/test_direct.py::TestSolveDirect::test_solution_satisfies_equation PASSED [ 16%]
+tests/test_direct.py::TestSolveDirect::test_analytical_solution PASSED   [ 17%]
+tests/test_direct.py::TestSolveDirect::test_timing_positive PASSED       [ 18%]
+tests/test_equation_recast.py::TestEquationRecast::test_converges_with_ic0 PASSED [ 18%]
+tests/test_equation_recast.py::TestEquationRecast::test_matches_direct PASSED [ 19%]
+tests/test_equation_recast.py::TestEquationRecast::test_same_operator_converges_immediately PASSED [ 19%]
+tests/test_equation_recast.py::TestEquationRecast::test_returns_cgresult PASSED [ 20%]
+tests/test_equation_recast.py::TestEquationRecast::test_fewer_outer_with_small_perturbation PASSED [ 21%]
+tests/test_evaluate_precond.py::TestEvaluatePreconditioner::test_returns_expected_keys PASSED [ 21%]
+tests/test_evaluate_precond.py::TestEvaluatePreconditioner::test_values_are_finite PASSED [ 22%]
+tests/test_evaluate_precond.py::TestEvaluatePreconditioner::test_ic0_reduces_iterations PASSED [ 22%]
+tests/test_evaluate_precond.py::TestEvaluatePreconditioner::test_fcg_path_runs PASSED [ 23%]
+tests/test_factorial_cases.py::TestFactorialCases::test_eight_cases_are_distinct PASSED [ 24%]
+tests/test_factorial_cases.py::TestFactorialCases::test_case1_cg_baseline_runs PASSED [ 24%]
+tests/test_factorial_cases.py::TestFactorialCases::test_case4_ic0_pcg_runs PASSED [ 25%]
+tests/test_factorial_cases.py::TestFactorialCases::test_case7_condition_loss_fcg_runs PASSED [ 26%]
+tests/test_factorial_cases.py::TestFactorialCases::test_results_json_has_expected_structure PASSED [ 26%]
+tests/test_fcg.py::TestFlexibleCG::test_converges_with_identity_precond PASSED [ 27%]
+tests/test_fcg.py::TestFlexibleCG::test_converges_with_jacobi PASSED     [ 27%]
+tests/test_fcg.py::TestFlexibleCG::test_converges_with_ic0 PASSED        [ 28%]
+tests/test_fcg.py::TestFlexibleCG::test_matches_direct_solution PASSED   [ 29%]
+tests/test_fcg.py::TestFlexibleCG::test_m_max_parameter PASSED           [ 29%]
+tests/test_fcg.py::TestFlexibleCG::test_returns_cgresult PASSED          [ 30%]
+tests/test_fcg.py::TestFlexibleCG::test_nonlinear_precond PASSED         [ 31%]
+tests/test_fcg.py::TestFlexibleCG::test_warm_start_compatible PASSED     [ 31%]
+tests/test_generate.py::TestGenerateSourceTerm::test_shape PASSED        [ 32%]
+tests/test_generate.py::TestGenerateSourceTerm::test_positive_values PASSED [ 32%]
+tests/test_generate.py::TestGenerateSourceTerm::test_reproducible PASSED [ 33%]
+tests/test_generate.py::TestGenerateSourceTerm::test_different_seeds_differ PASSED [ 34%]
+tests/test_generate.py::TestGenerateDataset::test_creates_files PASSED   [ 34%]
+tests/test_generate.py::TestGenerateDataset::test_correct_shapes PASSED  [ 35%]
+tests/test_generate.py::TestGenerateDataset::test_solutions_satisfy_equation PASSED [ 36%]
+tests/test_losses.py::TestConditionLoss::test_positive_output PASSED     [ 36%]
+tests/test_losses.py::TestConditionLoss::test_gradient_flows PASSED      [ 37%]
+tests/test_losses.py::TestConditionLoss::test_probe_count_affects_variance PASSED [ 37%]
+tests/test_losses.py::TestConditionLoss::test_sparse_matrix_shape PASSED [ 38%]
+tests/test_losses.py::TestConditionLoss::test_conv_mode_has_stencil_kernel PASSED [ 39%]
+tests/test_losses.py::TestConditionLoss::test_conv_and_sparse_agree PASSED [ 39%]
+tests/test_losses.py::TestConditionLoss::test_zero_model_gives_large_loss PASSED [ 40%]
+tests/test_metrics.py::TestComputeError::test_identical_is_zero PASSED   [ 40%]
+tests/test_metrics.py::TestComputeError::test_known_error PASSED         [ 41%]
+tests/test_metrics.py::TestComputeError::test_zero_reference PASSED      [ 42%]
+tests/test_metrics.py::TestComputeSpeedup::test_equal_times PASSED       [ 42%]
+tests/test_metrics.py::TestComputeSpeedup::test_faster PASSED            [ 43%]
+tests/test_metrics.py::TestComputeSpeedup::test_zero_test_time PASSED    [ 44%]
+tests/test_metrics.py::TestSummarizeRun::test_keys_present PASSED        [ 44%]
+tests/test_metrics.py::TestSummarizeRun::test_dof_correct PASSED         [ 45%]
+tests/test_metrics.py::TestSummarizeExperiment::test_aggregation PASSED  [ 45%]
+tests/test_nn_preconditioner.py::TestNNPreconditioner::test_returns_callable PASSED [ 46%]
+tests/test_nn_preconditioner.py::TestNNPreconditioner::test_output_shape PASSED [ 47%]
+tests/test_nn_preconditioner.py::TestNNPreconditioner::test_deterministic PASSED [ 47%]
+tests/test_nn_preconditioner.py::TestNNPreconditioner::test_works_in_fcg PASSED [ 48%]
+tests/test_pcg.py::TestPreconditionedCG::test_converges_with_jacobi PASSED [ 49%]
+tests/test_pcg.py::TestPreconditionedCG::test_converges_with_ic0 PASSED  [ 49%]
+tests/test_pcg.py::TestPreconditionedCG::test_matches_direct_solution PASSED [ 50%]
+tests/test_pcg.py::TestPreconditionedCG::test_fewer_iterations_than_cg PASSED [ 50%]
+tests/test_pcg.py::TestPreconditionedCG::test_warm_start_compatible PASSED [ 51%]
+tests/test_pcg.py::TestPreconditionedCG::test_residual_history_recorded PASSED [ 52%]
+tests/test_pcg.py::TestPreconditionedCG::test_returns_cgresult PASSED    [ 52%]
+tests/test_pcg.py::TestPreconditionedCG::test_timing_recorded PASSED     [ 53%]
+tests/test_pcg.py::TestPreconditionedCG::test_ic0_fewer_than_jacobi PASSED [ 54%]
+tests/test_poisson.py::TestAssemblePoisson2D::test_shape PASSED          [ 54%]
+tests/test_poisson.py::TestAssemblePoisson2D::test_symmetric PASSED      [ 55%]
+tests/test_poisson.py::TestAssemblePoisson2D::test_diagonal_is_four PASSED [ 55%]
+tests/test_poisson.py::TestAssemblePoisson2D::test_max_five_nonzeros_per_row PASSED [ 56%]
+tests/test_poisson.py::TestAssemblePoisson2D::test_positive_definite PASSED [ 57%]
+tests/test_poisson.py::TestAssemblePoisson2D::test_known_eigenvalues PASSED [ 57%]
+tests/test_poisson.py::TestAssemblePoisson2D::test_multiple_sizes PASSED [ 58%]
+tests/test_poisson.py::TestAssembleRhs::test_shape PASSED                [ 59%]
+tests/test_poisson.py::TestAssembleRhs::test_scaling PASSED              [ 59%]
+tests/test_poisson.py::TestGetGridPoints::test_shape PASSED              [ 60%]
+tests/test_poisson.py::TestGetGridPoints::test_interior_only PASSED      [ 60%]
+tests/test_poisson.py::TestValidateMatrix::test_valid_matrix_passes PASSED [ 61%]
+tests/test_poisson_3d.py::TestPoisson3DAssembly::test_shape PASSED       [ 62%]
+tests/test_poisson_3d.py::TestPoisson3DAssembly::test_symmetric PASSED   [ 62%]
+tests/test_poisson_3d.py::TestPoisson3DAssembly::test_spd PASSED         [ 63%]
+tests/test_poisson_3d.py::TestPoisson3DAssembly::test_diagonal PASSED    [ 63%]
+tests/test_poisson_3d.py::TestPoisson3DAssembly::test_nnz_per_row PASSED [ 64%]
+tests/test_poisson_3d.py::TestPoisson3DAssembly::test_validate PASSED    [ 65%]
+tests/test_poisson_3d.py::TestPoisson3DGrid::test_grid_shape PASSED      [ 65%]
+tests/test_poisson_3d.py::TestPoisson3DGrid::test_grid_range PASSED      [ 66%]
+tests/test_poisson_3d.py::TestPoisson3DSource::test_source_shape PASSED  [ 67%]
+tests/test_poisson_3d.py::TestPoisson3DSource::test_rhs_shape PASSED     [ 67%]
+tests/test_poisson_3d.py::TestPoisson3DSolvers::test_cg_converges PASSED [ 68%]
+tests/test_poisson_3d.py::TestPoisson3DSolvers::test_cg_matches_direct PASSED [ 68%]
+tests/test_poisson_3d.py::TestPoisson3DSolvers::test_jacobi_pcg PASSED   [ 69%]
+tests/test_poisson_3d.py::TestPoisson3DSolvers::test_ic0_pcg PASSED      [ 70%]
+tests/test_poisson_3d.py::TestPoisson3DSolvers::test_fcg PASSED          [ 70%]
+tests/test_poisson_3d.py::TestUNet3D::test_forward PASSED                [ 71%]
+tests/test_poisson_3d.py::TestUNet3D::test_output_shape_n32 PASSED       [ 72%]
+tests/test_poisson_3d.py::TestConditionLoss3D::test_loss_computes PASSED [ 72%]
+tests/test_poisson_3d.py::TestConditionLoss3D::test_loss_with_optimizations PASSED [ 73%]
+tests/test_poisson_3d.py::TestNNPreconditioner3D::test_make_preconditioner PASSED [ 73%]
+tests/test_poisson_3d.py::TestNNPreconditioner3D::test_zero_input PASSED [ 74%]
+tests/test_precond_dataset.py::TestPrecondDataGeneration::test_output_files_exist PASSED [ 75%]
+tests/test_precond_dataset.py::TestPrecondDataGeneration::test_output_shapes PASSED [ 75%]
+tests/test_precond_dataset.py::TestPrecondDataGeneration::test_errors_satisfy_relation PASSED [ 76%]
+tests/test_precond_dataset.py::TestPrecondDataset::test_length PASSED    [ 77%]
+tests/test_precond_dataset.py::TestPrecondDataset::test_output_shapes PASSED [ 77%]
+tests/test_precond_dataset.py::TestPrecondDataset::test_normalisation PASSED [ 78%]
+tests/test_precond_dataset.py::TestPrecondDataset::test_no_normalisation PASSED [ 78%]
+tests/test_preconditioners.py::TestJacobiPreconditioner::test_diagonal_inverse PASSED [ 79%]
+tests/test_preconditioners.py::TestJacobiPreconditioner::test_output_shape PASSED [ 80%]
+tests/test_preconditioners.py::TestJacobiPreconditioner::test_pcg_fewer_iterations PASSED [ 80%]
+tests/test_preconditioners.py::TestIC0Preconditioner::test_output_shape PASSED [ 81%]
+tests/test_preconditioners.py::TestIC0Preconditioner::test_approximate_solve PASSED [ 81%]
+tests/test_preconditioners.py::TestIC0Preconditioner::test_pcg_fewer_iterations PASSED [ 82%]
+tests/test_preconditioners.py::TestIC0Preconditioner::test_better_than_jacobi PASSED [ 83%]
+tests/test_regression.py::TestRegression::test_case1_n16_matches_committed PASSED [ 83%]
+tests/test_regression.py::TestRegression::test_case4_n16_matches_committed PASSED [ 84%]
+tests/test_regression.py::TestRegression::test_case3_n16_matches_committed PASSED [ 85%]
+tests/test_unet.py::TestUNet::test_output_shape PASSED                   [ 85%]
+tests/test_unet.py::TestUNet::test_output_shape_various_N PASSED         [ 86%]
+tests/test_unet.py::TestUNet::test_larger_model PASSED                   [ 86%]
+tests/test_unet.py::TestUNet::test_parameter_count_larger_than_cnn PASSED [ 87%]
+tests/test_unet.py::TestUNet::test_skip_connections_matter PASSED        [ 88%]
+tests/test_unet.py::TestUNet::test_gradients_flow PASSED                 [ 88%]
+tests/test_unet.py::TestUNet::test_batch_norm_present PASSED             [ 89%]
+tests/test_variable_poisson.py::TestVariablePoissonAssembly::test_constant_d_matches_standard PASSED [ 90%]
+tests/test_variable_poisson.py::TestVariablePoissonAssembly::test_symmetric PASSED [ 90%]
+tests/test_variable_poisson.py::TestVariablePoissonAssembly::test_positive_definite PASSED [ 91%]
+tests/test_variable_poisson.py::TestVariablePoissonAssembly::test_cg_converges PASSED [ 91%]
+tests/test_variable_poisson.py::TestVariablePoissonAssembly::test_shape PASSED [ 92%]
+tests/test_variable_poisson.py::TestVariablePoissonAssembly::test_higher_contrast_more_iterations PASSED [ 93%]
+tests/test_variable_poisson.py::TestDiffusionCoefficient::test_smooth_positive PASSED [ 93%]
+tests/test_variable_poisson.py::TestDiffusionCoefficient::test_discontinuous_has_jump PASSED [ 94%]
+tests/test_variable_poisson.py::TestDiffusionCoefficient::test_layered_shape PASSED [ 95%]
+tests/test_visualize.py::TestPlotConvergence::test_returns_figure PASSED [ 95%]
+tests/test_visualize.py::TestPlotConvergence::test_saves_file PASSED     [ 96%]
+tests/test_visualize.py::TestPlotSolution::test_returns_figure PASSED    [ 96%]
+tests/test_visualize.py::TestPlotSolution::test_saves_file PASSED        [ 97%]
+tests/test_visualize.py::TestPlotScaling::test_returns_figure PASSED     [ 98%]
+tests/test_visualize.py::TestPlotScaling::test_saves_file PASSED         [ 98%]
+tests/test_visualize.py::TestPlotComparisonBar::test_returns_figure PASSED [ 99%]
+tests/test_visualize.py::TestPlotComparisonBar::test_saves_file PASSED   [100%]
+
+============================== warnings summary ===============================
+C:\Users\rafee\AppData\Local\Programs\Python\Python312\Lib\site-packages\matplotlib\_fontconfig_pattern.py:64
+  C:\Users\rafee\AppData\Local\Programs\Python\Python312\Lib\site-packages\matplotlib\_fontconfig_pattern.py:64: PyparsingDeprecationWarning: 'oneOf' deprecated - use 'one_of'
+    prop = Group((name + Suppress("=") + comma_separated(value)) | oneOf(_CONSTANTS))
+
+C:\Users\rafee\AppData\Local\Programs\Python\Python312\Lib\site-packages\matplotlib\_fontconfig_pattern.py:85: 6 warnings
+tests/test_visualize.py: 25 warnings
+  C:\Users\rafee\AppData\Local\Programs\Python\Python312\Lib\site-packages\matplotlib\_fontconfig_pattern.py:85: PyparsingDeprecationWarning: 'parseString' deprecated - use 'parse_string'
+    parse = parser.parseString(pattern)
+
+C:\Users\rafee\AppData\Local\Programs\Python\Python312\Lib\site-packages\matplotlib\_fontconfig_pattern.py:89: 6 warnings
+tests/test_visualize.py: 25 warnings
+  C:\Users\rafee\AppData\Local\Programs\Python\Python312\Lib\site-packages\matplotlib\_fontconfig_pattern.py:89: PyparsingDeprecationWarning: 'resetCache' deprecated - use 'reset_cache'
+    parser.resetCache()
+
+C:\Users\rafee\AppData\Local\Programs\Python\Python312\Lib\site-packages\matplotlib\_mathtext.py:45
+  C:\Users\rafee\AppData\Local\Programs\Python\Python312\Lib\site-packages\matplotlib\_mathtext.py:45: PyparsingDeprecationWarning: 'enablePackrat' deprecated - use 'enable_packrat'
+    ParserElement.enablePackrat()
+
+tests/test_visualize.py::TestPlotConvergence::test_returns_figure
+  C:\Users\rafee\AppData\Local\Programs\Python\Python312\Lib\site-packages\matplotlib\_mathtext.py:2010: PyparsingDeprecationWarning: 'oneOf' deprecated - use 'one_of'
+    p.space          = oneOf(self._space_widths)("space")
+
+tests/test_visualize.py::TestPlotConvergence::test_returns_figure
+  C:\Users\rafee\AppData\Local\Programs\Python\Python312\Lib\site-packages\matplotlib\_mathtext.py:2012: PyparsingDeprecationWarning: 'oneOf' deprecated - use 'one_of'
+    p.style_literal  = oneOf(
+
+tests/test_visualize.py::TestPlotConvergence::test_returns_figure
+  C:\Users\rafee\AppData\Local\Programs\Python\Python312\Lib\site-packages\matplotlib\_mathtext.py:2020: PyparsingDeprecationWarning: 'leaveWhitespace' deprecated - use 'leave_whitespace'
+    )("sym").leaveWhitespace()
+
+tests/test_visualize.py::TestPlotConvergence::test_returns_figure
+  C:\Users\rafee\AppData\Local\Programs\Python\Python312\Lib\site-packages\matplotlib\_mathtext.py:2024: PyparsingDeprecationWarning: 'oneOf' deprecated - use 'one_of'
+    p.start_group    = Optional(r"\math" + oneOf(self._fontnames)("font")) + "{"
+
+tests/test_visualize.py::TestPlotConvergence::test_returns_figure
+  C:\Users\rafee\AppData\Local\Programs\Python\Python312\Lib\site-packages\matplotlib\_mathtext.py:2027: PyparsingDeprecationWarning: 'oneOf' deprecated - use 'one_of'
+    p.delim          = oneOf(self._delims)
+
+tests/test_visualize.py: 47 warnings
+  C:\Users\rafee\AppData\Local\Programs\Python\Python312\Lib\site-packages\matplotlib\_mathtext.py:1984: PyparsingDeprecationWarning: 'setName' deprecated - use 'set_name'
+    val.setName(key)
+
+tests/test_visualize.py: 44 warnings
+  C:\Users\rafee\AppData\Local\Programs\Python\Python312\Lib\site-packages\matplotlib\_mathtext.py:1987: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'
+    val.setParseAction(getattr(self, key))
+
+tests/test_visualize.py: 16 warnings
+  C:\Users\rafee\AppData\Local\Programs\Python\Python312\Lib\site-packages\matplotlib\_mathtext.py:1748: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'
+    return Empty().setParseAction(raise_error)
+
+tests/test_visualize.py::TestPlotConvergence::test_returns_figure
+  C:\Users\rafee\AppData\Local\Programs\Python\Python312\Lib\site-packages\matplotlib\_mathtext.py:2088: PyparsingDeprecationWarning: 'endQuoteChar' argument is deprecated, use 'end_quote_char'
+    p.text = cmd(r"\text", QuotedString('{', '\\', endQuoteChar="}"))
+
+tests/test_visualize.py::TestPlotConvergence::test_returns_figure
+  C:\Users\rafee\AppData\Local\Programs\Python\Python312\Lib\site-packages\matplotlib\_mathtext.py:2097: PyparsingDeprecationWarning: 'oneOf' deprecated - use 'one_of'
+    + OneOrMore(oneOf(["_", "^"]) - p.placeable)("subsuper")
+
+tests/test_visualize.py::TestPlotConvergence::test_returns_figure
+  C:\Users\rafee\AppData\Local\Programs\Python\Python312\Lib\site-packages\matplotlib\_mathtext.py:2146: PyparsingDeprecationWarning: 'unquoteResults' argument is deprecated, use 'unquote_results'
+    p.math_string   = QuotedString('$', '\\', unquoteResults=False)
+
+tests/test_visualize.py::TestPlotConvergence::test_returns_figure
+  C:\Users\rafee\AppData\Local\Programs\Python\Python312\Lib\site-packages\matplotlib\_mathtext.py:2147: PyparsingDeprecationWarning: 'leaveWhitespace' deprecated - use 'leave_whitespace'
+    p.non_math      = Regex(r"(?:(?:\\[$])|[^$])*").leaveWhitespace()
+
+tests/test_visualize.py: 12 warnings
+  C:\Users\rafee\AppData\Local\Programs\Python\Python312\Lib\site-packages\matplotlib\_mathtext.py:2170: PyparsingDeprecationWarning: 'parseString' deprecated - use 'parse_string'
+    result = self._expression.parseString(s)
+
+tests/test_visualize.py: 12 warnings
+  C:\Users\rafee\AppData\Local\Programs\Python\Python312\Lib\site-packages\matplotlib\_mathtext.py:2197: PyparsingDeprecationWarning: 'parseString' deprecated - use 'parse_string'
+    return self._math_expression.parseString(toks[0][1:-1], parseAll=True)
+
+tests/test_visualize.py: 12 warnings
+  C:\Users\rafee\AppData\Local\Programs\Python\Python312\Lib\site-packages\pyparsing\util.py:466: PyparsingDeprecationWarning: 'parseAll' argument is deprecated, use 'parse_all'
+    return fn(self, *args, **kwargs)
+
+tests/test_visualize.py: 12 warnings
+  C:\Users\rafee\AppData\Local\Programs\Python\Python312\Lib\site-packages\matplotlib\_mathtext.py:2178: PyparsingDeprecationWarning: 'resetCache' deprecated - use 'reset_cache'
+    ParserElement.resetCache()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+===================== 161 passed, 228 warnings in 11.22s ======================
