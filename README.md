@@ -28,16 +28,30 @@ tests/          - 161 automated tests across 22 files
 results/        - Committed JSON artefacts, figures, checkpoints
 ```
 
-## Key Results (from committed artefacts)
+## Headline Findings
 
-| Case | Preconditioner | Loss | N=16 | N=32 | N=64 | Reduction | Source |
-|------|---------------|------|------|------|------|-----------|--------|
-| 1 | None (CG) | — | 40.6 | 80.6 | 161.5 | baseline | `results/factorial/results.json` |
-| 4 | IC(0) | — | 15.7 | 28.2 | 54.0 | 61-67% | `results/factorial/results.json` |
-| 6 | U-Net | MSE | 1000 | 1000 | 1000 | FAILS | `results/nn_precond/mse_results.json` |
-| 7 | U-Net | Condition | 9.0 | 12.7 | 27.0 | 78-84% | `results/factorial/results.json` |
+| Case | Preconditioner | Loss | N=32 | Reduction |
+|------|---------------|------|------|-----------|
+| 1 | None (CG) | — | 80.6 | baseline |
+| 4 | IC(0) | — | 28.2 | 65% |
+| 6 | U-Net | MSE | 1000 | FAILS |
+| 7 | U-Net | Condition | 12.7 | 84% |
 
-Note: Case 6 is not in `results/factorial/results.json` because it was run through a separate MSE training and evaluation script. Its results are in `results/nn_precond/mse_results.json`.
+## Full Core Factorial Results (committed)
+
+Source: `results/factorial/results.json` (Cases 1–5, 7, 8)
+
+| Case | x0 | Preconditioner | Loss | Solver | N=16 | N=32 | N=64 | Reduction |
+|------|-----|---------------|------|--------|------|------|------|-----------|
+| 1 | Zero | None | — | CG | 40.6 | 80.6 | 161.5 | baseline |
+| 2 | Warm-start | None | MSE | CG | 43.6 | 86.8 | 175.9 | -7 to -9% |
+| 3 | Zero | Jacobi | — | PCG | 40.6 | 80.6 | 161.5 | 0% |
+| 4 | Zero | IC(0) | — | PCG | 15.7 | 28.2 | 54.0 | 61-67% |
+| 5 | Warm-start | IC(0) | MSE | PCG | 16.2 | 29.8 | 56.2 | 60-65% |
+| 7 | Zero | U-Net | Condition | FCG | 9.0 | 12.7 | 27.0 | 78-84% |
+| 8 | Warm-start | U-Net | Condition | FCG | 9.0 | 11.0 | 45.4 | 72-86% |
+
+**Case 6 (MSE-trained U-Net preconditioner):** evaluated separately via `results/nn_precond/mse_results.json`. Did not converge at any grid size (1000-iteration cap reached at N=16, 32, and 64).
 
 ## Testing
 
