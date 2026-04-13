@@ -1,0 +1,129 @@
+{
+  "total_tests": 161,
+  "total_files": 22,
+  "categories": {
+    "solver": 29,
+    "other": 18,
+    "training/loss": 10,
+    "data/operator": 27,
+    "evaluation": 21,
+    "regression/structure": 5,
+    "preconditioner": 11,
+    "3D": 21,
+    "regression/reproducibility": 3,
+    "model": 7,
+    "variable-coefficient": 9
+  },
+  "files": [
+    {
+      "file": "test_cg.py",
+      "category": "solver",
+      "test_count": 8
+    },
+    {
+      "file": "test_cnn.py",
+      "category": "other",
+      "test_count": 6
+    },
+    {
+      "file": "test_condition_loss_pipeline.py",
+      "category": "training/loss",
+      "test_count": 3
+    },
+    {
+      "file": "test_dataset.py",
+      "category": "data/operator",
+      "test_count": 8
+    },
+    {
+      "file": "test_direct.py",
+      "category": "solver",
+      "test_count": 4
+    },
+    {
+      "file": "test_equation_recast.py",
+      "category": "other",
+      "test_count": 5
+    },
+    {
+      "file": "test_evaluate_precond.py",
+      "category": "evaluation",
+      "test_count": 4
+    },
+    {
+      "file": "test_factorial_cases.py",
+      "category": "regression/structure",
+      "test_count": 5
+    },
+    {
+      "file": "test_fcg.py",
+      "category": "solver",
+      "test_count": 8
+    },
+    {
+      "file": "test_generate.py",
+      "category": "data/operator",
+      "test_count": 7
+    },
+    {
+      "file": "test_losses.py",
+      "category": "training/loss",
+      "test_count": 7
+    },
+    {
+      "file": "test_metrics.py",
+      "category": "evaluation",
+      "test_count": 9
+    },
+    {
+      "file": "test_nn_preconditioner.py",
+      "category": "preconditioner",
+      "test_count": 4
+    },
+    {
+      "file": "test_pcg.py",
+      "category": "solver",
+      "test_count": 9
+    },
+    {
+      "file": "test_poisson.py",
+      "category": "data/operator",
+      "test_count": 12
+    },
+    {
+      "file": "test_poisson_3d.py",
+      "category": "3D",
+      "test_count": 21
+    },
+    {
+      "file": "test_precond_dataset.py",
+      "category": "other",
+      "test_count": 7
+    },
+    {
+      "file": "test_preconditioners.py",
+      "category": "preconditioner",
+      "test_count": 7
+    },
+    {
+      "file": "test_regression.py",
+      "category": "regression/reproducibility",
+      "test_count": 3
+    },
+    {
+      "file": "test_unet.py",
+      "category": "model",
+      "test_count": 7
+    },
+    {
+      "file": "test_variable_poisson.py",
+      "category": "variable-coefficient",
+      "test_count": 9
+    },
+    {
+      "file": "test_visualize.py",
+      "category": "evaluation",
+      "test_count": 8
+    }
+  ]
+}

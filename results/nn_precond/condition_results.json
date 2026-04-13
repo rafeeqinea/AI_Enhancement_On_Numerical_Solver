@@ -1,0 +1,47 @@
+{
+  "N16": {
+    "precond_name": "NN-Condition",
+    "N": 16,
+    "num_samples": 50,
+    "cold_iters_mean": 40.6,
+    "cold_iters_std": 1.0583005244258363,
+    "precond_iters_mean": 9.0,
+    "precond_iters_std": 0.0,
+    "iteration_reduction": 0.7783251231527094,
+    "cold_time_mean": 0.0003172319998702733,
+    "precond_time_mean": 0.026541703999973833,
+    "speedup": 0.011952209242880037,
+    "mean_error": 2.293383047941156e-08,
+    "max_error": 4.969328369737128e-08
+  },
+  "N32": {
+    "precond_name": "NN-Condition",
+    "N": 32,
+    "num_samples": 50,
+    "cold_iters_mean": 80.58,
+    "cold_iters_std": 1.9296631830451654,
+    "precond_iters_mean": 12.74,
+    "precond_iters_std": 1.1968291440301744,
+    "iteration_reduction": 0.8418962521717548,
+    "cold_time_mean": 0.0008563719999438035,
+    "precond_time_mean": 0.02625003800003469,
+    "speedup": 0.03262364800929705,
+    "mean_error": 2.3768707224276148e-08,
+    "max_error": 1.0762398024188108e-07
+  },
+  "N64": {
+    "precond_name": "NN-Condition",
+    "N": 64,
+    "num_samples": 50,
+    "cold_iters_mean": 161.48,
+    "cold_iters_std": 4.167685208841954,
+    "precond_iters_mean": 27.02,
+    "precond_iters_std": 5.591028527918633,
+    "iteration_reduction": 0.8326727768144662,
+    "cold_time_mean": 0.003473755999839341,
+    "precond_time_mean": 0.05999387399991974,
+    "speedup": 0.05790184510911878,
+    "mean_error": 1.4460146011768001e-08,
+    "max_error": 3.450715708113917e-08
+  }
+}

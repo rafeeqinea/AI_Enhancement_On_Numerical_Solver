@@ -1,0 +1,35 @@
+{
+  "N16": {
+    "N": 16,
+    "dof": 256,
+    "num_samples": 50,
+    "method": "AMG (PyAMG ruge_stuben)",
+    "mean_iters": 5.0,
+    "std_iters": 0.0,
+    "mean_time": 0.0009214879999763071,
+    "mean_error": 1.779614992374979e-07,
+    "max_error": 2.0749745575785724e-07
+  },
+  "N32": {
+    "N": 32,
+    "dof": 1024,
+    "num_samples": 50,
+    "method": "AMG (PyAMG ruge_stuben)",
+    "mean_iters": 5.0,
+    "std_iters": 0.0,
+    "mean_time": 0.001436831999990318,
+    "mean_error": 2.1744246454482288e-07,
+    "max_error": 2.431997663763577e-07
+  },
+  "N64": {
+    "N": 64,
+    "dof": 4096,
+    "num_samples": 50,
+    "method": "AMG (PyAMG ruge_stuben)",
+    "mean_iters": 5.0,
+    "std_iters": 0.0,
+    "mean_time": 0.0029477599999609082,
+    "mean_error": 2.01676584285303e-07,
+    "max_error": 2.2574024108740793e-07
+  }
+}

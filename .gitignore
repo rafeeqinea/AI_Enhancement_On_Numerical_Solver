@@ -1,0 +1,27 @@
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+/data/
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+*.so
+.DS_Store
+Thumbs.db
+
+# Report drafts (not for version control)
+report/
+
+# Model checkpoints and training artefacts
+*.pt
+*.npy
+results/checkpoints/
+results/curriculum/
+results/warmstart/cnn_checkpoints/
+results/warmstart/unet_checkpoints/
+results/figures/
+tstex_modules/

@@ -1,0 +1,81 @@
+{
+  "stages": [
+    {
+      "name": "Condition-loss N=16",
+      "type": "condition_loss_core",
+      "epochs": 163,
+      "training_time_s": null
+    },
+    {
+      "name": "Condition-loss N=32",
+      "type": "condition_loss_core",
+      "epochs": 227,
+      "training_time_s": null
+    },
+    {
+      "name": "Condition-loss N=64",
+      "type": "condition_loss_core",
+      "epochs": 197,
+      "training_time_s": null
+    },
+    {
+      "name": "MSE N=16",
+      "type": "mse_core",
+      "training_time_s": null
+    },
+    {
+      "name": "MSE N=32",
+      "type": "mse_core",
+      "training_time_s": null
+    },
+    {
+      "name": "MSE N=64",
+      "type": "mse_core",
+      "training_time_s": null
+    },
+    {
+      "name": "Curriculum 2D N=16",
+      "type": "curriculum_2d",
+      "epochs": 200,
+      "is_scratch": true,
+      "training_time_s": 261.90914940834045
+    },
+    {
+      "name": "Curriculum 2D N=32",
+      "type": "curriculum_2d",
+      "epochs": 50,
+      "is_scratch": false,
+      "training_time_s": 118.44092607498169
+    },
+    {
+      "name": "Curriculum 2D N=64",
+      "type": "curriculum_2d",
+      "epochs": 50,
+      "is_scratch": false,
+      "training_time_s": 201.5091724395752
+    },
+    {
+      "name": "Curriculum 2D N=128",
+      "type": "curriculum_2d",
+      "epochs": 50,
+      "is_scratch": false,
+      "training_time_s": 788.6785178184509
+    },
+    {
+      "name": "3D Condition-loss N=32",
+      "type": "3d",
+      "epochs": 300,
+      "training_time_s": 21586.824470996857
+    },
+    {
+      "name": "Warm-start U-Net",
+      "type": "warmstart",
+      "training_time_s": null
+    }
+  ],
+  "total_training_time_s": 22957.362236738205,
+  "total_training_time_h": 6.377045065760613,
+  "gpu_model": "NVIDIA RTX 4060 Laptop GPU",
+  "estimated_tdp_w": 115,
+  "estimated_energy_kwh": 0.7333601825624705
+}

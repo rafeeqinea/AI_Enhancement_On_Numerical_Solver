@@ -1,0 +1,30 @@
+34b42fa add conv trick, fix tests, add requirements.txt, update test count
+a9cd1fb update main README with Case 9 results and full branch structure
+44c3ca1 add v6-scaling branch with curriculum training and scaling analysis
+02d8009 add Case 9 IC(0)+NN combined preconditioner with results
+6d9c5a3 add curriculum training, Case 9, accuracy verification, report figures
+8cc0377 update main README with full case explanations and project overview
+22bedb1 update README for v5-3d branch with 3D results and training details
+e5034dc add v4-combined branch with combined preconditioner plan
+5973d49 add 3D Poisson extension with condition loss preconditioner
+d98ac09 add consolidated results summary
+8c6715a add MD-PNOP equation recast solver for variable coefficients
+639ce6a add per-version result summaries with comparison plots
+42e1d6a update README for v3 branch
+d71802a update README for v2 branch
+c3ada77 update README for v1 branch
+bcd812b update README for v0 branch
+fb25107 update README with project overview and results
+82bf1df update README with project overview and results
+99be0ac update README with project overview and results
+ced25e7 update README with project overview and results
+fe84c8d update README with project overview and results
+6c9a24d fix code review findings: remove dead params, add type hints
+c524c94 add variable-coefficient Poisson experiments (v3.1)
+aca7d52 add variable-coefficient Poisson assembly and diffusion generators
+09e6557 add N=128 condition-loss preconditioner: 93.9% iteration reduction
+fbff266 add full 8-case factorial experiment results
+5415af4 condition loss preconditioner achieves 76-86% iteration reduction
+4d9f73f add Case 6 results: MSE preconditioner fails to converge
+584d031 add Case 7 experiment runner (condition loss training)
+31f223c add condition loss via Hutchinson and Case 6 experiment runner

@@ -1,0 +1,68 @@
+{
+  "experiment": "baseline_v0",
+  "tolerance": 1e-06,
+  "seed": 42,
+  "num_sources_per_N": 5,
+  "runs": [
+    {
+      "N": 8,
+      "dof": 64,
+      "num_sources": 5,
+      "mean_cg_iterations": 21.4,
+      "std_cg_iterations": 0.4898979485566356,
+      "mean_cg_time": 0.00017991999975492946,
+      "mean_direct_time": 0.00013523999987228308,
+      "mean_relative_error": 4.0225090870890636e-08,
+      "max_relative_error": 5.1756522413340476e-08,
+      "speedup": 0.7516674080507705
+    },
+    {
+      "N": 16,
+      "dof": 256,
+      "num_sources": 5,
+      "mean_cg_iterations": 41.0,
+      "std_cg_iterations": 1.0954451150103321,
+      "mean_cg_time": 0.00032316000033461023,
+      "mean_direct_time": 0.0003148999998302315,
+      "mean_relative_error": 4.466897709731593e-08,
+      "max_relative_error": 5.857382025321475e-08,
+      "speedup": 0.9744399043946465
+    },
+    {
+      "N": 32,
+      "dof": 1024,
+      "num_sources": 5,
+      "mean_cg_iterations": 81.0,
+      "std_cg_iterations": 0.8944271909999159,
+      "mean_cg_time": 0.0009552400000757188,
+      "mean_direct_time": 0.00146813999999722,
+      "mean_relative_error": 2.8624459957533622e-08,
+      "max_relative_error": 3.318868186615349e-08,
+      "speedup": 1.536933126628748
+    },
+    {
+      "N": 64,
+      "dof": 4096,
+      "num_sources": 5,
+      "mean_cg_iterations": 162.2,
+      "std_cg_iterations": 4.214261501141095,
+      "mean_cg_time": 0.003412940000089293,
+      "mean_direct_time": 0.005876060000082362,
+      "mean_relative_error": 2.989054124215657e-08,
+      "max_relative_error": 3.671337414353739e-08,
+      "speedup": 1.7217003521681091
+    },
+    {
+      "N": 128,
+      "dof": 16384,
+      "num_sources": 5,
+      "mean_cg_iterations": 321.6,
+      "std_cg_iterations": 4.923413450036469,
+      "mean_cg_time": 0.08292755999991641,
+      "mean_direct_time": 0.03243387999991683,
+      "mean_relative_error": 1.6492045961231475e-08,
+      "max_relative_error": 2.2683353093214122e-08,
+      "speedup": 0.3911109889155007
+    }
+  ]
+}

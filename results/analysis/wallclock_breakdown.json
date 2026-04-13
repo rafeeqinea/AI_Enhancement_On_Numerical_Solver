@@ -1,0 +1,92 @@
+{
+  "N16": {
+    "Case 1": {
+      "label": "CG",
+      "mean_iters": 40.6,
+      "total_time_s": 0.00034032800002023575,
+      "per_iteration_ms": 0.00838246305468561,
+      "overhead_vs_cg": 1.0
+    },
+    "Case 4": {
+      "label": "IC(0)+PCG",
+      "mean_iters": 15.72,
+      "total_time_s": 0.008031364000089525,
+      "per_iteration_ms": 0.5109010178173998,
+      "overhead_vs_cg": 23.59889283165647
+    },
+    "Case 7": {
+      "label": "Cond+FCG",
+      "mean_iters": 9.0,
+      "total_time_s": 0.022887571999963257,
+      "per_iteration_ms": 2.543063555551473,
+      "overhead_vs_cg": 67.25151030359645
+    },
+    "AMG": {
+      "label": "AMG (PyAMG)",
+      "mean_iters": 5.0,
+      "total_time_s": 0.0009214879999763071,
+      "per_iteration_ms": 0.1842975999952614,
+      "overhead_vs_cg": 2.7076467405606235
+    }
+  },
+  "N32": {
+    "Case 1": {
+      "label": "CG",
+      "mean_iters": 80.58,
+      "total_time_s": 0.0008719720000226516,
+      "per_iteration_ms": 0.010821196326913026,
+      "overhead_vs_cg": 1.0
+    },
+    "Case 4": {
+      "label": "IC(0)+PCG",
+      "mean_iters": 28.18,
+      "total_time_s": 0.015990384000106134,
+      "per_iteration_ms": 0.5674373314445044,
+      "overhead_vs_cg": 18.338185170728813
+    },
+    "Case 7": {
+      "label": "Cond+FCG",
+      "mean_iters": 12.74,
+      "total_time_s": 0.03383585599989601,
+      "per_iteration_ms": 2.6558756671817907,
+      "overhead_vs_cg": 38.80383314947847
+    },
+    "AMG": {
+      "label": "AMG (PyAMG)",
+      "mean_iters": 5.0,
+      "total_time_s": 0.001436831999990318,
+      "per_iteration_ms": 0.28736639999806357,
+      "overhead_vs_cg": 1.647796030093848
+    }
+  },
+  "N64": {
+    "Case 1": {
+      "label": "CG",
+      "mean_iters": 161.48,
+      "total_time_s": 0.0034328039998217717,
+      "per_iteration_ms": 0.021258384938207656,
+      "overhead_vs_cg": 1.0
+    },
+    "Case 4": {
+      "label": "IC(0)+PCG",
+      "mean_iters": 54.04,
+      "total_time_s": 0.049979728000034813,
+      "per_iteration_ms": 0.9248654330132274,
+      "overhead_vs_cg": 14.55944703007504
+    },
+    "Case 7": {
+      "label": "Cond+FCG",
+      "mean_iters": 27.02,
+      "total_time_s": 0.06080426800006535,
+      "per_iteration_ms": 2.250343005183766,
+      "overhead_vs_cg": 17.712711824858705
+    },
+    "AMG": {
+      "label": "AMG (PyAMG)",
+      "mean_iters": 5.0,
+      "total_time_s": 0.0029477599999609082,
+      "per_iteration_ms": 0.5895519999921817,
+      "overhead_vs_cg": 0.858703264186931
+    }
+  }
+}
