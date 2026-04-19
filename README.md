@@ -20,6 +20,8 @@ The core study is an eight-case factorial design that isolates training objectiv
 
 Under matched architecture, solver, initial guess, and evaluation conditions, the MSE-trained preconditioner did not converge at any tested grid size. The condition-loss-trained preconditioner reduced iteration counts by 78 to 84 percent across `N=16`, `32`, and `64`. In this setup, the training objective determined whether the learned preconditioner worked at all.
 
+Short version: the loss function was the deciding factor. Everything else was held the same.
+
 ## Repository structure
 
 ```text
@@ -59,6 +61,8 @@ Source: `results/factorial/results.json` (Cases 1–5, 7, 8)
 
 **Case 6 (MSE-trained U-Net preconditioner):** evaluated separately via `results/nn_precond/mse_results.json`. It hit the 1000-iteration cap at `N=16`, `32`, and `64`.
 
+Case 6 is the one that didn't work. Case 7 is the main win.
+
 ## Installation
 
 ```bash
@@ -75,32 +79,88 @@ Requirements:
 - matplotlib
 - pyamg (optional, for the AMG baseline)
 
-## Running the checks
-
-Run the test suite:
+## Quick environment check
 
 ```bash
-python -m pytest tests/ -v
+python --version
+python -c "import torch; print(torch.__version__, 'cuda=', torch.cuda.is_available())"
+python -c "import importlib.util; print('pyamg installed =', importlib.util.find_spec('pyamg') is not None)"
 ```
+
+## Running the tests
+
+```bash
+python -m pytest tests/ -v                        # full test suite
+python -m pytest tests/test_fcg.py -v             # one file
+python -m pytest tests/ -k "condition_loss" -v    # match by pattern
+```
+
+## Demo-day quick recipe
+
+Minimal demo-day sequence:
+
+```bash
+python -m pytest tests/ -v                         # confirm tests pass
+python experiments/run_factorial.py                # core 8-case factorial
+python experiments/run_spectral_analysis.py        # eigenvalue evidence
+```
+
+Artefacts land in `results/factorial/` and `results/spectral_analysis/`.
 
 ## Running the main experiments
 
-These are the scripts that matter for the dissertation results:
+The scripts that produced the dissertation results:
 
 ```bash
-python experiments/run_factorial.py
-python experiments/run_condition_loss.py
-python experiments/run_curriculum.py
-python experiments/run_3d.py
-python experiments/run_spectral_analysis.py
-python experiments/run_statistical_analysis.py
+python experiments/run_factorial.py                # core factorial: Cases 1-5, 7, 8 at N=16, 32, 64
+python experiments/run_nn_precond.py               # Case 6 (MSE-trained U-Net) evaluated separately
+python experiments/run_condition_loss.py           # trains the condition-loss U-Net
+python experiments/run_curriculum.py --dim 2       # N=16 -> 32 -> 64 -> 128 curriculum transfer
 ```
 
-The exact outputs depend on the script, but the committed artefacts already used in the dissertation are in `results/`.
+## Running the classical baselines
+
+```bash
+python experiments/run_baseline.py                 # plain CG baseline
+python experiments/run_preconditioned.py           # Jacobi and IC(0) within PCG
+python experiments/run_amg_baseline.py             # AMG reference
+python experiments/run_warmstart.py                # warm-start CNN/U-Net predictor
+```
+
+## Running the extensions
+
+```bash
+python experiments/run_3d.py --evaluate           # 3D Poisson evaluation at N=32
+python experiments/run_3d.py --all                # train then evaluate 3D (slow)
+python experiments/run_variable_coeff.py           # variable-coefficient test
+python experiments/run_conv_n512.py                # N=512 convolution-mode scaling attempt
+```
+
+## Running the analysis and figures
+
+```bash
+python experiments/run_spectral_analysis.py        # N=16 eigenvalue spectrum
+python experiments/run_statistical_analysis.py     # Wilcoxon, Holm-Bonferroni, bootstrap CIs
+python experiments/generate_all_figures.py         # all committed figures
+python experiments/generate_chapter5_figures.py    # Chapter 5 figures only
+python experiments/fix_early_figures.py            # tidies earlier-version figures
+```
+
+## Utility scripts
+
+These support reporting rather than producing dissertation numbers:
+
+```bash
+python experiments/build_test_inventory.py         # counts and summarises the test suite
+python experiments/build_training_cost_summary.py  # aggregates GPU-hour figures
+python experiments/derive_wallclock_breakdown.py   # per-iteration timing split
+```
+
+Most scripts take several minutes on a reasonable GPU. The curriculum and 3D runs are the slow ones. The committed artefacts already used in the dissertation are in `results/` if you want to skip re-running.
 
 ## Artefact map
 
-The main committed artefacts are:
+If a number in the dissertation needs checking, the file it came from is one of these.
 
 - `results/factorial/results.json` — core eight-case factorial results used in the main comparison
 - `results/nn_precond/mse_results.json` — separate MSE evaluation used to document Case 6 failure
@@ -121,7 +181,7 @@ This repo preserves the same caveats as the dissertation:
 
 ## Colab notebooks
 
-Two exploratory notebooks are tracked at the repo root:
+These were used when the local GPU ran out of room. Two exploratory notebooks are tracked at the repo root:
 
 - `colab_n512.ipynb` — hosted-cloud exploratory run for `N=512`
 - `colab_3d_n64.ipynb` — hosted-cloud exploratory 3D `N=64` run
