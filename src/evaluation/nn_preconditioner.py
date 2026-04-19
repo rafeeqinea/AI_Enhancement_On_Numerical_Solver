@@ -34,6 +34,7 @@ def make_nn_preconditioner(
         r_unit = r / r_norm
         r_grid = r_unit.reshape(grid_shape)
 
+        # The network expects the residual on the interior with Dirichlet zeros around it.
         padded = np.zeros(padded_shape, dtype=np.float32)
         interior = tuple(slice(1, -1) for _ in range(dim))
         padded[interior] = r_grid
@@ -87,6 +88,7 @@ def make_composite_preconditioner(
         e = np.zeros_like(r)
         e = jacobi_smooth(e, r)
         r_after = r - A @ e
+        # Let the network correct what the cheap smoother leaves behind.
         e_nn = nn_correction(r_after)
         e = e + e_nn
         e = jacobi_smooth(e, r)

@@ -74,6 +74,7 @@ class ConditionLoss(nn.Module):
         return (1,) + (self.N + 2,) * self.dim
 
     def _boundary_mask(self, w: torch.Tensor) -> torch.Tensor:
+        # The model works on zero-padded grids, so boundary probes must stay zero too.
         if self.dim == 2:
             w[:, :, 0, :] = 0
             w[:, :, -1, :] = 0
@@ -130,6 +131,7 @@ class ConditionLoss(nn.Module):
         n_batches = 0
 
         for start in range(0, K, k_batch):
+            # Batch the Hutchinson probes so the loss fits on smaller GPUs.
             k = min(k_batch, K - start)
             shape = (k,) + self._probe_shape()
             w = torch.randn(shape, device=device)
@@ -150,6 +152,7 @@ class ConditionLoss(nn.Module):
 
             w_interior = self._extract_interior(w)
             diff = w_interior - Az
+            # Hutchinson estimate of ||I - AM||^2_F from the sampled probes.
             batch_loss = (diff * diff).sum(dim=1).mean()
             total_loss = total_loss + batch_loss
             n_batches += 1

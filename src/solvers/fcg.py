@@ -47,6 +47,8 @@ def flexible_cg(
 
         w = precond(r)
 
+        # Re-orthogonalise against only the recent search directions to keep the
+        # method flexible without storing the full Krylov history.
         m_i = min(i, max(1, i % (m_max + 1)))
         p = w.copy()
         start_idx = max(0, len(P) - m_i)
@@ -68,6 +70,7 @@ def flexible_cg(
         P.append(p)
         S.append(s)
 
+        # Keep a sliding window of directions; this is the restart/limited-memory part.
         if len(P) > m_max + 1:
             P.pop(0)
             S.pop(0)
